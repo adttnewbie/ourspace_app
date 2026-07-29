@@ -21,4 +21,26 @@ class StickyNote {
   final DateTime createdAt;
   final DateTime updatedAt;
   final bool canEdit;
+
+  StickyNote copyWith({
+    String? id,
+    String? body,
+    String? color,
+    String? createdBy,
+    String? createdByNickname,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? canEdit,
+  }) {
+    return StickyNote(
+      id: id ?? this.id,
+      body: body ?? this.body,
+      color: color ?? this.color,
+      createdBy: createdBy ?? this.createdBy,
+      createdByNickname: createdByNickname ?? this.createdByNickname,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      canEdit: canEdit ?? this.canEdit,
+    );
+  }
 }

@@ -10,10 +10,9 @@ import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text_field.dart';
 import '../../../../shared/widgets/scrapbook_card.dart';
 import '../../../notes/presentation/notes_providers.dart';
-import '../home_providers.dart';
-import 'today_notes_section.dart';
+import '../../../notes/presentation/widgets/note_color_swatches.dart';
 
-/// Quick sticky draft + `notes.create` (screen-specs/home.md).
+/// Quick sticky draft + notesListProvider.create (screen-specs/home.md).
 class QuickAddSticky extends ConsumerStatefulWidget {
   const QuickAddSticky({super.key});
 
@@ -49,13 +48,12 @@ class _QuickAddStickyState extends ConsumerState<QuickAddSticky> {
 
     setState(() => _submitting = true);
     try {
-      ref.read(offlineGuardProvider).ensureOnline();
       await ref
-          .read(notesRepositoryProvider)
+          .read(notesListProvider.notifier)
           .create(body: body, color: _color);
       if (!mounted) return;
       _controller.clear();
-      await ref.read(homeProvider.notifier).refresh();
+      setState(() {});
     } on AppFailure catch (e) {
       if (!mounted) return;
       if (e.code == 'OFFLINE_MUTATION_BLOCKED') {
@@ -83,28 +81,17 @@ class _QuickAddStickyState extends ConsumerState<QuickAddSticky> {
   Widget build(BuildContext context) {
     final online = ref.watch(isOnlineProvider);
     final body = _controller.text.trim();
-    final canSubmit =
-        body.isNotEmpty && online && !_submitting;
+    final canSubmit = body.isNotEmpty && online && !_submitting;
 
     return ScrapbookCard(
       tone: ScrapTone.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              for (final key in NoteColorSwatch.keys) ...[
-                NoteColorSwatch(
-                  colorKey: key,
-                  selected: _color == key,
-                  onTap: _submitting
-                      ? () {}
-                      : () => setState(() => _color = key),
-                ),
-                if (key != NoteColorSwatch.keys.last)
-                  const SizedBox(width: AppSpacing.x2),
-              ],
-            ],
+          NoteColorSwatches(
+            selected: _color,
+            enabled: !_submitting,
+            onSelected: (key) => setState(() => _color = key),
           ),
           const SizedBox(height: AppSpacing.x3),
           AppTextField(

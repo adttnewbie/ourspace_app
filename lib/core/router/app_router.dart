@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/home/presentation/home_screen.dart';
-import '../../features/notes/presentation/notes_placeholder_screen.dart';
+import '../../features/notes/presentation/notes_screen.dart';
 import '../../features/pairing/presentation/pairing_screen.dart';
 import '../../features/session/presentation/session_gate_screen.dart';
 import '../../features/settings/presentation/settings_placeholder_screen.dart';
@@ -113,7 +113,7 @@ GoRouter createAppRouter({
               GoRoute(
                 path: AppRoutes.notes,
                 name: 'notes',
-                builder: (context, state) => const NotesPlaceholderScreen(),
+                builder: (context, state) => const NotesScreen(),
               ),
             ],
           ),
