@@ -15,7 +15,10 @@ void main() {
       await storage.write(StorageKeys.sessionToken, 'session_test_token');
 
       expect(await storage.read(StorageKeys.memberId), 'member_test_1');
-      expect(await storage.read(StorageKeys.sessionToken), 'session_test_token');
+      expect(
+        await storage.read(StorageKeys.sessionToken),
+        'session_test_token',
+      );
     });
 
     test('delete_removesOnlyTargetKey', () async {
