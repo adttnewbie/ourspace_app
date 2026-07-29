@@ -46,3 +46,12 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Local env / secrets (see docs/environment.md)
+.env
+env/dev.local.json
+env/dev.json
+env/staging.json
+env/prod.json
+android/key.properties
+

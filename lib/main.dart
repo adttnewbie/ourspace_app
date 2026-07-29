@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OurSpaceApp extends StatelessWidget {
-  const new({super.key});
+import 'app.dart';
+import 'core/config/app_config.dart';
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-    );
-  }
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  AppConfig.ensureInitialized();
+  runApp(const ProviderScope(child: OurSpaceApp()));
 }
