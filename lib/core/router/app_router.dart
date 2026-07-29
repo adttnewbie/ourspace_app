@@ -1,15 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/home/presentation/home_placeholder_screen.dart';
 import '../../features/notes/presentation/notes_placeholder_screen.dart';
 import '../../features/pairing/presentation/pairing_placeholder_screen.dart';
+import '../../features/session/presentation/session_gate_screen.dart';
 import '../../features/settings/presentation/settings_placeholder_screen.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../../shared/widgets/route_placeholder_screen.dart';
 import 'app_routes.dart';
 import 'session_auth.dart';
 
-/// Auth boundary redirects (docs/routing.md §7). Pure for unit tests.
+/// Auth boundary redirects (docs/routing.md §6–7). Pure for unit tests.
 String? resolveAuthRedirect({
   required SessionAuthStatus status,
   required String matchedLocation,
@@ -26,6 +29,11 @@ String? resolveAuthRedirect({
     return null;
   }
 
+  if (status == SessionAuthStatus.temporaryError) {
+    if (!isPublic) return AppRoutes.pairing;
+    return null;
+  }
+
   if (status == SessionAuthStatus.unauthenticated) {
     if (isPublic) return null;
     return AppRoutes.pairing;
@@ -33,6 +41,21 @@ String? resolveAuthRedirect({
 
   if (isPairing) return AppRoutes.home;
   return null;
+}
+
+/// Pairing path: gate while checking / temporaryError; product placeholder otherwise.
+class _PairingRouteBody extends ConsumerWidget {
+  const _PairingRouteBody();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(sessionAuthNotifierProvider).status;
+    if (auth == SessionAuthStatus.unknown ||
+        auth == SessionAuthStatus.temporaryError) {
+      return const SessionGateScreen();
+    }
+    return const PairingPlaceholderScreen();
+  }
 }
 
 /// Builds [GoRouter] with shell + redirects (docs/routing.md).
@@ -53,7 +76,7 @@ GoRouter createAppRouter({
       GoRoute(
         path: AppRoutes.pairing,
         name: 'pairing',
-        builder: (context, state) => const PairingPlaceholderScreen(),
+        builder: (context, state) => const _PairingRouteBody(),
       ),
       GoRoute(
         path: AppRoutes.offline,
