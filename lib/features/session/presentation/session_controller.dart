@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/error/app_failure.dart';
 import '../../../core/router/session_auth.dart';
+import '../domain/member.dart';
 import '../domain/session_repository.dart';
 import '../domain/session_snapshot.dart';
 import 'session_providers.dart';
@@ -95,6 +96,36 @@ class SessionController extends Notifier<SessionControllerState> {
 
   /// User retry from gate UI.
   Future<void> retry() => resume(force: true);
+
+  /// Pairing success: secure write + authenticated memory (security.md §4).
+  Future<void> applyPairedSession({
+    required String memberId,
+    required String sessionToken,
+    required DateTime anniversaryDate,
+    required List<Member> members,
+  }) async {
+    await _repo.writeLocal(memberId: memberId, sessionToken: sessionToken);
+    if (!_alive) return;
+
+    Member self = Member(id: memberId, nickname: '');
+    for (final m in members) {
+      if (m.id == memberId) {
+        self = m;
+        break;
+      }
+    }
+
+    final snapshot = SessionSnapshot(
+      member: self,
+      members: members,
+      anniversaryDate: anniversaryDate,
+      fetchedAt: DateTime.now(),
+    );
+    _apply(
+      SessionControllerState.authenticated(snapshot),
+      SessionAuthStatus.authenticated,
+    );
+  }
 
   /// Clears secure keys + memory (Settings / after UNAUTHORIZED path).
   Future<void> clearLocal() async {

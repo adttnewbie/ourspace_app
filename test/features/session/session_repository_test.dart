@@ -93,5 +93,11 @@ void main() {
       expect(await storage.read(StorageKeys.memberId), isNull);
       expect(await storage.read(StorageKeys.sessionToken), isNull);
     });
+
+    test('writeLocal_persistsBothKeys', () async {
+      await repo.writeLocal(memberId: 'member_a', sessionToken: 'tok');
+      expect(await storage.read(StorageKeys.memberId), 'member_a');
+      expect(await storage.read(StorageKeys.sessionToken), 'tok');
+    });
   });
 }

@@ -90,7 +90,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(router.state.uri.path, AppRoutes.pairing);
-      expect(find.text('Pairing'), findsOneWidget);
+      expect(find.text('OurSpace'), findsOneWidget);
     });
 
     testWidgets('authenticated_pairing_redirectsToHome', (tester) async {

@@ -23,6 +23,9 @@ class _FakeSessionRepository implements SessionRepository {
   Object? error;
   int resumeCalls = 0;
   int clearCalls = 0;
+  int writeCalls = 0;
+  String? lastWrittenMemberId;
+  String? lastWrittenToken;
 
   @override
   Future<bool> hasLocalCredentials() async => hasCredentials;
@@ -42,6 +45,17 @@ class _FakeSessionRepository implements SessionRepository {
   Future<void> clearLocal() async {
     clearCalls++;
     hasCredentials = false;
+  }
+
+  @override
+  Future<void> writeLocal({
+    required String memberId,
+    required String sessionToken,
+  }) async {
+    writeCalls++;
+    lastWrittenMemberId = memberId;
+    lastWrittenToken = sessionToken;
+    hasCredentials = true;
   }
 }
 
@@ -75,7 +89,6 @@ void main() {
       addTearDown(container.dispose);
 
       final auth = container.read(sessionAuthNotifierProvider);
-      // Drain auto-bootstrap from build().
       await container.read(sessionControllerProvider.notifier).resume();
 
       expect(
@@ -163,6 +176,42 @@ void main() {
         SessionPhase.unauthenticated,
       );
       expect(repo.resumeCalls, 0);
+    });
+
+    test('applyPairedSession_writesAndAuthenticates', () async {
+      final storage = FakeSecureStorage();
+      final repo = _FakeSessionRepository();
+      final container = ProviderContainer(
+        overrides: [
+          secureStorageProvider.overrideWithValue(storage),
+          sessionRepositoryProvider.overrideWithValue(repo),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final auth = container.read(sessionAuthNotifierProvider);
+      final members = const [
+        Member(id: 'member_a', nickname: 'A'),
+        Member(id: 'member_b', nickname: 'B'),
+      ];
+      await container
+          .read(sessionControllerProvider.notifier)
+          .applyPairedSession(
+            memberId: 'member_a',
+            sessionToken: 'session_test_token',
+            anniversaryDate: DateTime.parse('2026-07-02T08:00:12.000Z'),
+            members: members,
+          );
+
+      expect(repo.writeCalls, 1);
+      expect(repo.lastWrittenMemberId, 'member_a');
+      expect(repo.lastWrittenToken, 'session_test_token');
+      expect(
+        container.read(sessionControllerProvider).status,
+        SessionPhase.authenticated,
+      );
+      expect(auth.status, SessionAuthStatus.authenticated);
+      expect(container.read(currentMemberIdProvider), 'member_a');
     });
   });
 }

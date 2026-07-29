@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/home/presentation/home_placeholder_screen.dart';
 import '../../features/notes/presentation/notes_placeholder_screen.dart';
-import '../../features/pairing/presentation/pairing_placeholder_screen.dart';
+import '../../features/pairing/presentation/pairing_screen.dart';
 import '../../features/session/presentation/session_gate_screen.dart';
 import '../../features/settings/presentation/settings_placeholder_screen.dart';
 import '../../shared/widgets/app_shell.dart';
@@ -43,7 +43,7 @@ String? resolveAuthRedirect({
   return null;
 }
 
-/// Pairing path: gate while checking / temporaryError; product placeholder otherwise.
+/// Pairing path: gate while checking / temporaryError; PairingScreen otherwise.
 class _PairingRouteBody extends ConsumerWidget {
   const _PairingRouteBody();
 
@@ -54,7 +54,7 @@ class _PairingRouteBody extends ConsumerWidget {
         auth == SessionAuthStatus.temporaryError) {
       return const SessionGateScreen();
     }
-    return const PairingPlaceholderScreen();
+    return const PairingScreen();
   }
 }
 

@@ -8,6 +8,12 @@ abstract class SessionRepository {
   /// Returns `null` when local tokens are missing (unauthenticated).
   Future<SessionSnapshot?> resume({bool force = false});
 
+  /// Writes pairing success credentials (security.md token lifecycle).
+  Future<void> writeLocal({
+    required String memberId,
+    required String sessionToken,
+  });
+
   /// Deletes `memberId` + `sessionToken` from secure storage.
   Future<void> clearLocal();
 

@@ -9,8 +9,8 @@ import 'session_dto.dart';
 /// [SessionRepository] backed by secure storage + ApiClient.
 class SessionRepositoryImpl implements SessionRepository {
   SessionRepositoryImpl({
-    required ApiClient this._apiClient,
-    required SecureStorage this._secureStorage,
+    required this._apiClient,
+    required this._secureStorage,
   });
 
   final ApiClient _apiClient;
@@ -44,6 +44,15 @@ class SessionRepositoryImpl implements SessionRepository {
     } catch (e) {
       throw ParseFailure(message: e.toString());
     }
+  }
+
+  @override
+  Future<void> writeLocal({
+    required String memberId,
+    required String sessionToken,
+  }) async {
+    await _secureStorage.write(StorageKeys.memberId, memberId);
+    await _secureStorage.write(StorageKeys.sessionToken, sessionToken);
   }
 
   @override
