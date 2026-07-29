@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'core/theme/app_theme.dart';
-import 'core/theme/theme_demo_screen.dart';
+import 'shared/widgets/shared_widgets_gallery.dart';
 
 class OurSpaceApp extends StatelessWidget {
   const OurSpaceApp({super.key});
@@ -12,7 +12,7 @@ class OurSpaceApp extends StatelessWidget {
       title: 'OurSpace',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
-      home: const ThemeDemoScreen(),
+      home: const SharedWidgetsGallery(),
     );
   }
 }
