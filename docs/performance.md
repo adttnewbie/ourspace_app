@@ -1,48 +1,34 @@
-# Performance Notes
+# Performance Notes (Flutter)
 
-OurSpace runs on a Vite frontend plus Google Apps Script, so the main goal is
-to avoid repeated calls and make slow network moments feel intentional.
+OurSpace Flutter client + Google Apps Script: tujuan utama menghindari repeated calls dan membuat momen jaringan lambat terasa intentional.
 
 ## Optimized Paths
 
-- `session.resume` is cached in memory for a short TTL. Manual Settings checks
-  still force a fresh session validation.
-- Identical in-flight safe read requests are deduped in `src/lib/api.ts`.
-- Home, Notes, Date Plans, and Shared Lists keep small last-known JSON payloads
-  in `sessionStorage` and refresh in the background.
-- Gallery keeps its list cache in memory only because `thumbnailData` can contain
-  base64 previews. It should not be persisted to browser storage.
-- Create/update/delete flows update the local list after backend success instead
-  of refetching the full list.
-- Home summary requests only one Gallery item so photo thumbnails do not slow
-  the first Home render.
-- `home.get` now includes the Home summary, so a current backend deployment
-  opens Home with one API request. The frontend keeps a compatibility fallback
-  for older Apps Script deployments.
-- Gallery, Dates, Lists, Notes, and Settings are lazy-loaded route chunks.
-- Loading states use compact scrapbook skeleton cards instead of blank screens or
-  large spinner-only panels.
+- `session.resume` di-cache in-memory TTL pendek. Manual Settings checks tetap force fresh validation.
+- Identical in-flight safe read requests di-dedupe di API client Dio layer.
+- Home, Notes, Date Plans, dan Shared Lists menyimpan last-known JSON payload di cache lokal ringan (memory + optional shared_preferences) dan refresh di background.
+- Gallery list cache memory-only karena `thumbnailData` bisa berisi base64; jangan persist ke storage.
+- Create/update/delete update list lokal setelah backend success (bukan full refetch).
+- Home summary membatasi Gallery item agar thumbnail tidak memperlambat first Home render.
+- `home.get` idealnya include Home summary (satu request). Client boleh compatibility fallback untuk Apps Script lama.
+- Feature screens di-lazy load via `go_router` deferred routes / code splitting patterns where practical.
+- Loading memakai compact scrapbook skeleton, bukan blank atau spinner-only besar.
 
 ## Cache TTLs
 
-- `home.get`: 45 seconds, `sessionStorage`.
-- `notes.list`: 60 seconds, `sessionStorage`.
-- `datePlans.list`: 60 seconds, `sessionStorage`.
-- `sharedLists.list`: 60 seconds, `sessionStorage`.
+- `home.get`: 45 seconds.
+- `notes.list`: 60 seconds.
+- `datePlans.list`: 60 seconds.
+- `sharedLists.list`: 60 seconds.
 - `gallery.list`: 60 seconds, memory only.
 
-If cached data exists, the page shows it first with a small "Lagi nyegerin
-data..." state while the background request refreshes. If refresh fails, the
-cached UI stays visible with a soft warning. If no cache exists, the page uses
-the layout-matched skeleton and then the normal error state if the request fails.
+Jika cache ada, screen menampilkan cache dulu + status pill "Lagi nyegerin data..." sambil background refresh. Jika refresh gagal, UI cache tetap + soft warning. Jika tidak ada cache, skeleton layout-matched lalu error state jika gagal.
 
-Saat browser offline, cache terakhir tetap dapat dibaca walaupun TTL-nya sudah
-lewat. Tidak ada background refresh sampai event `online` diterima. Detail dan
-batasannya ada di [Offline State UX](./offline.md).
+Saat offline, cache terakhir tetap boleh dibaca meski TTL lewat. Tidak ada background refresh sampai connectivity online. Detail di [Offline State UX](./offline.md).
 
 ## In-flight Dedupe
 
-Only safe reads are deduped:
+Safe reads yang di-dedupe:
 
 - `health.check`
 - `session.resume`
@@ -56,70 +42,35 @@ Only safe reads are deduped:
 - `backup.health`
 - `backups.list`
 
-Mutations and state-changing actions are intentionally not deduped:
+Mutations dan state-changing actions **tidak** di-dedupe:
 
-- create/update/delete actions
+- create/update/delete
 - `pairing.start`
 - `pairing.signal`
 - `session.recover`
-- `backup.runNow`
-- `couple.reset`
+- backup run / reset pairing
 
-Manual Settings "Cek session" calls `session.resume` with a forced fresh
-validation, bypassing the short in-memory session cache.
+## Flutter-specific
 
-## Debugging API Calls
+- Prefer `const` widgets, selective Riverpod rebuilds (`select`, `family`).
+- Decode gallery thumbnails off main isolate if large.
+- Image memory: use bounded cache; clear on memory pressure when practical.
+- Avoid rebuilding entire `AppShell` on list updates.
+- Pairing poll 1–2s only in waiting; cancel timers on dispose.
+- Keep list item widgets stable keys (`id`).
 
-Development builds log lightweight API traces from `src/lib/api.ts` with:
+## Backend constraints (unchanged)
 
-- action
-- timestamp
-- cache hit/miss
-- in-flight dedupe reuse
-- duration
-- success/error code
-
-The trace never logs `sessionToken`, raw request body, or secrets. Production
-builds skip these logs.
-
-## Apps Script Notes
-
-- `health.check` returns before Spreadsheet/Drive access.
-- `setupSchema()` is manual only and must not run during normal `doPost`.
-- `getSpreadsheet()` reuses the Spreadsheet object within the runtime context to
-  reduce repeated `SpreadsheetApp.openById` overhead.
-- Each web request keeps an in-memory row/header/sheet context, so repeated reads
-  of the same sheet inside one action do not call Spreadsheet again.
-- `CacheService.getScriptCache()` stores headers and small raw row snapshots.
-  Current row TTLs are 30 seconds for Notes, Dates, Gallery, Lists, and Backups.
-  Couple settings use request-local caching only so anniversary reads never use
-  a shared stale snapshot.
-- Cache values above 80 KB are skipped automatically. This commonly affects a
-  Gallery with several thumbnails; the request still falls back to Spreadsheet.
-- All app writes invalidate the matching shared cache after Spreadsheet succeeds
-  and update the request-local snapshot.
-- Pairing rechecks member/settings data from Spreadsheet inside its script lock,
-  and backup clears row snapshots before exporting, so these sensitive paths do
-  not trust stale cache data.
-- `gallery.list` reads Spreadsheet metadata only. It does not fetch Drive blobs.
-
-## Known Limits
-
-- Apps Script and Spreadsheet reads can still be slow on cold starts.
-- Gallery list payload can grow if many small photos store base64 thumbnails.
-  Large photos intentionally use placeholders instead of heavy thumbnail data.
-- Backup can be heavy by design and should stay manual/triggered, not part of
-  normal page loading.
-- Apps Script Cache Service is best-effort. A cache miss is always safe because
-  Spreadsheet remains the source of truth.
+- Apps Script cold start can be slow — skeletons + cache hide latency.
+- Spreadsheet reads remain source of truth; any server cache miss is safe.
+- Gallery payload grows with base64 thumbnails; large photos may use placeholders.
+- Backup is heavy — manual/triggered only, not part of normal page load.
 
 ## Manual Checks
 
-1. Open protected pages twice; the second visit should reuse cached list data.
-2. Navigate between Notes, Dates, Gallery, Lists, and Settings; the app shell
-   should stay visible while lazy chunks load.
-3. Create/edit/delete an item and confirm the list updates without a full reload.
-4. Confirm Network does not show duplicate simultaneous identical API requests.
-5. Confirm browser requests still go through `/api/apps-script`.
-6. Open Apps Script execution logs and confirm repeated reads can show
-   `spreadsheet:getSheetObjects:cache-hit`.
+1. Buka protected screens dua kali; visit kedua reuse cache.
+2. Navigate Notes ↔ Dates ↔ Gallery ↔ Lists ↔ Settings; shell tetap; body swap cepat.
+3. Create/edit/delete item; list update tanpa full app restart.
+4. Confirm no duplicate simultaneous identical API requests.
+5. Confirm client still hits configured API base (proxy/direct as documented).
+6. Apps Script logs may show spreadsheet cache-hit on repeated reads.

@@ -1,39 +1,96 @@
-# OurSpace Docs
+# OurSpace Docs (Flutter)
 
-Dokumentasi ini menjadi blueprint awal untuk membangun OurSpace: web app private untuk kamu dan pasangan, dengan onboarding hold button, home scrapbook, dan sticky notes sebagai fitur v1.
+Dokumentasi ini adalah **single source of truth** untuk membangun OurSpace sebagai aplikasi **Flutter native** (Android + iOS): private scrapbook untuk dua orang, onboarding hold button, home scrapbook, dan sticky notes sebagai v1.
 
-## Isi docs
+Gunakan urutan baca untuk AI coding agent:  
+[implementation-order.md](./implementation-order.md) → [architecture.md](./architecture.md) → [coding-standard.md](./coding-standard.md) → fitur spesifik.
 
-- [Product Brief](./product-brief.md): arah produk, v1, fitur lanjutan, dan batasan.
-- [Architecture](./architecture.md): rancangan stack Vite React, Apps Script, Spreadsheet, Drive, session, dan deploy.
-- [Pairing Flow](./pairing-flow.md): detail onboarding hold button dua device.
-- [UI Direction](./ui-direction.md): arah visual scrapbook, home, navigasi, dan motion.
-- [Data Model](./data-model.md): struktur sheet untuk pairing, member, settings, sticky notes, dan fase lanjut.
-- [API Contract](./api-contract.md): action API Apps Script untuk pairing, home, dan notes v1.
-- [API Proxy](./api-proxy.md): same-origin proxy agar frontend tidak kena CORS Apps Script.
-- [Backup](./backup.md): cara kerja backup JSON private, trigger harian, dan batasan restore.
-- [Deployment](./deployment.md): langkah deploy Vercel, env, dan smoke test production.
-- [Performance](./performance.md): catatan cache ringan, lazy route, dan batasan Apps Script.
-- [Offline UX](./offline.md): perilaku cache, batasan aksi offline, dan halaman offline.
-- [Production Checklist](./production-checklist.md): checklist env, Apps Script, Drive, Vercel, dan manual test sebelum dipakai harian.
-- [Live Testing](./live-testing.md): checklist deploy, pairing, Home, dan Notes CRUD sebelum fitur baru.
-- [MVP Roadmap](./mvp-roadmap.md): urutan build dari docs sampai fitur lanjutan.
+---
 
-## Stack awal
+## Design
 
-- Frontend: Vite, React, TypeScript, Tailwind CSS, shadcn/ui.
-- Backend API: Google Apps Script Web App.
-- Database: Google Spreadsheet.
-- Storage: Google Drive.
-- Deploy frontend: Vercel.
-- Auth/session v1: pairing dua device, `memberId`, dan session lokal.
+- [Flutter Design System](../design.md) — tokens, widgets, motion, a11y, layout
 
-## Prinsip build
+## Product & architecture
 
-- Private by default: data couple tidak boleh terbuka publik.
-- Mobile-first: mayoritas pemakaian kemungkinan dari HP.
-- PWA basic: bisa di-install ke home screen, tanpa offline-first dulu.
-- Spreadsheet dipakai sebagai database ringan, bukan sistem query kompleks.
-- Drive hanya menyimpan file; metadata tetap dicatat di Spreadsheet.
-- V1 dibatasi ke Pairing + Home + Sticky Notes supaya cepat selesai dan stabil.
-- Gallery, Date Plans, Shared Lists, dan backup otomatis masuk fase setelah v1.
+| Doc | Isi |
+| --- | --- |
+| [product-brief.md](./product-brief.md) | V1, non-goals, fitur lanjut |
+| [architecture.md](./architecture.md) | Stack, folder tree, session, risiko |
+| [ui-direction.md](./ui-direction.md) | Vibe UI scrapbook |
+| [decision-log.md](./decision-log.md) | Alasan Riverpod/Dio/go_router/dll. |
+| [implementation-order.md](./implementation-order.md) | Build dari nol, DoD per step |
+| [mvp-roadmap.md](./mvp-roadmap.md) | Fase produk |
+
+## Engineering standards
+
+| Doc | Isi |
+| --- | --- |
+| [coding-standard.md](./coding-standard.md) | Dart style, layers, Riverpod, mappers |
+| [routing.md](./routing.md) | go_router table, guards, redirects |
+| [state-management.md](./state-management.md) | Provider map, cache, polling |
+| [error-handling.md](./error-handling.md) | Taxonomy, copy ids, retry |
+| [security.md](./security.md) | Tokens, logging, injection |
+| [testing.md](./testing.md) | Unit/widget/integration/golden |
+| [packages.md](./packages.md) | Dependencies & permissions |
+| [environment.md](./environment.md) | `API_BASE_URL`, flavors, secrets |
+| [accessibility.md](./accessibility.md) | TalkBack/VoiceOver, targets, motion |
+| [sequence-diagrams.md](./sequence-diagrams.md) | Pairing, auth, cache, backup |
+| [copy-catalog.md](./copy-catalog.md) | Microcopy + copy id |
+
+## Domain & API
+
+| Doc | Isi |
+| --- | --- |
+| [data-model.md](./data-model.md) | Spreadsheet schema + Dart paths |
+| [api-contract.md](./api-contract.md) | Actions, payloads, errors |
+| [api-proxy.md](./api-proxy.md) | Direct Dio vs optional proxy |
+| [pairing-flow.md](./pairing-flow.md) | Hold 3s / window 30s |
+| [offline.md](./offline.md) | Cache read-only offline |
+| [performance.md](./performance.md) | TTL, dedupe |
+| [backup.md](./backup.md) | JSON backup Drive |
+
+## Screen specs
+
+| Doc | Screen |
+| --- | --- |
+| [screen-specs/README.md](./screen-specs/README.md) | Index |
+| [screen-specs/pairing.md](./screen-specs/pairing.md) | Pairing |
+| [screen-specs/home.md](./screen-specs/home.md) | Home |
+| [screen-specs/notes.md](./screen-specs/notes.md) | Notes |
+| [screen-specs/settings.md](./screen-specs/settings.md) | Settings |
+
+## Ship
+
+| Doc | Isi |
+| --- | --- |
+| [deployment.md](./deployment.md) | Android/iOS + Apps Script |
+| [production-checklist.md](./production-checklist.md) | Pre-daily use |
+| [live-testing.md](./live-testing.md) | Manual E2E |
+
+---
+
+## Stack (canonical)
+
+- **Client:** Flutter, Riverpod, go_router, Dio  
+- **Session:** `flutter_secure_storage` (`memberId`, `sessionToken`)  
+- **Cache non-secret:** memory + optional `shared_preferences`  
+- **API base (client):** `API_BASE_URL` via dart-define  
+- **Backend:** Google Apps Script `doPost`  
+- **DB / files:** Spreadsheet + Drive (fase lanjut)  
+- **UI:** Material 3 foundation + scrapbook design system  
+
+## Prinsip
+
+- Private by default  
+- Mobile phone column (max ~480)  
+- V1 = Pairing + Home + Notes  
+- Bukan offline-first  
+- Jangan ubah business logic / API contract tanpa update docs  
+
+## Env naming (wajib konsisten)
+
+| Name | Where |
+| --- | --- |
+| `API_BASE_URL` | Flutter Dio |
+| `APPS_SCRIPT_URL` | Optional server proxy only |

@@ -1,10 +1,10 @@
-# OurSpace Design System
+# OurSpace Flutter Design System
 
-> Single source of truth for the existing visual language.  
-> Documented from the live codebase — not a redesign.  
-> Stack: React 19 · Vite · Tailwind CSS v4 · shadcn/ui (radix-luma) · lucide-react · tw-animate-css
+> Single source of truth for the OurSpace visual language on Flutter.  
+> Converted from the original web design language — not a redesign.  
+> Stack target: Flutter · Material 3 foundation · Riverpod · go_router · Dio · lucide_icons (or equivalent) · flutter_secure_storage
 
-**Related sources:** `src/index.css`, `src/components/**`, `src/pages/**`, `docs/product-brief.md`, `docs/ui-direction.md`
+**Related sources:** `lib/core/theme/**`, `lib/shared/widgets/**`, `lib/features/**`, `docs/product-brief.md`, `docs/ui-direction.md`
 
 ---
 
@@ -15,7 +15,7 @@
 | **Product** | OurSpace — private digital scrapbook for exactly two people (a couple) |
 | **Purpose** | Shared space for sticky notes, photos, date plans, and wishlists; pairing hold-button ritual sets the anniversary date |
 | **Target users** | Two private members only (no public/guest roles). Primary device: mobile phone |
-| **Platforms** | Mobile web (PWA), desktop browser (phone-frame shell) |
+| **Platforms** | Flutter mobile (Android + iOS). Tablet uses the same phone-column scrapbook layout, not a multi-column desktop dashboard |
 | **Language** | Indonesian, casual / intimate (`santai`) — not corporate |
 | **Branding** | Pastel scrapbook: paper cards, washi tape, dotted canvas, multi-pastel accents |
 | **Personality** | Warm, playful, personal, soft, tactile |
@@ -27,56 +27,50 @@
 
 ## 2. Design philosophy
 
-Observed principles from implementation:
-
-| Principle | Evidence |
+| Principle | Flutter evidence |
 | --- | --- |
-| **Scrapbook / paper craft** | `paper-card`, dashed inner border, tape strips, pastel sticky tones, radial paper dots on `.app-canvas` |
-| **Pastel multi-color, not mono-pink** | Five scrap accents (pink, mint, yellow, blue, lavender) rotated across cards and notes |
-| **Mobile-first, phone shell** | `max-w-[480px]` app column, fixed bottom nav, safe-area padding |
-| **Soft premium, not enterprise** | Large black weights, pill buttons, soft brown-tinted shadows, cream paper surfaces |
+| **Scrapbook / paper craft** | `ScrapbookCard` widget, dashed inner border, tape strip widgets, pastel sticky tones, dotted canvas painter on `AppCanvas` |
+| **Pastel multi-color, not mono-pink** | Five scrap accents (pink, mint, yellow, blue, lavender) rotated across cards and notes via `ScrapTone` |
+| **Mobile-first, phone shell** | Content max width ~480 logical px, fixed bottom navigation, `SafeArea` / system inset padding |
+| **Soft premium, not enterprise** | Large black font weights, pill buttons, soft brown-tinted shadows, cream paper surfaces |
 | **Personal, not productivity-SaaS** | Indonesian casual copy, greeting + days-together counter, hold-to-pair ritual |
 | **Honest states** | Offline banners, cache warnings, empty CTAs, error cards with retry — never silent failure |
-| **Gentle motion** | Short ease-out transforms; `prefers-reduced-motion` kills long animations |
-| **Accessible enough for thumbs** | 40–56px targets, skip link, focus rings, `aria-label` on icon buttons |
+| **Gentle motion** | Short ease-out transforms; honor `MediaQuery.disableAnimations` / reduced motion |
+| **Accessible enough for thumbs** | 40–56 logical px targets, Semantics labels, focus highlights, icon-only buttons labeled |
 
-**Not the language of this product:** dense admin tables, pure monochrome, sharp 4px corners, neon cyber, glassmorphism-heavy dashboards.
+**Not the language of this product:** dense admin tables, pure monochrome, sharp 4px corners, neon cyber, heavy glassmorphism, Material dense data UIs.
 
 ---
 
-## 3. Visual language
+## 3. Design principles
 
 ### Hierarchy
 
-1. **Eyebrow** — `text-xs font-extrabold uppercase tracking-[0.04em] text-muted-foreground`
-2. **Page title** — `text-4xl font-black` (sometimes `text-3xl` on pairing subflows)
-3. **Section title** — `text-2xl font-black` (empty/error cards also use this)
-4. **Card title** — `text-xl` / `text-lg font-black`
-5. **Body** — `text-sm font-bold leading-relaxed text-muted-foreground` or `text-base font-extrabold` for note body
-6. **Meta / caption** — `text-xs font-extrabold uppercase tracking-[0.04em]`
+1. **Page title** — largest black weight (`display` / ~36 sp)
+2. **Card titles / sticky body** — bold readable body
+3. **Meta / author / muted** — smaller, muted plum
+4. **Decorative** — tape, dots, stickers never compete with text
 
 ### Composition
 
-- Vertical stack: page header → optional status pill → cards/sections (`space-y-5` or `space-y-4`)
-- Primary CTA often full-width inside cards
-- Page-level create action: circular icon button top-right with `.page-action` pink glow
-- Decorative tape is top-left of cards; never covers text
-- Inner dashed frame on `.paper-card` (7px inset) for paper craft feel
+- One primary action per screen region
+- Scrapbook surfaces stack vertically with consistent gaps
+- Bottom navigation is permanent chrome after session is ready
+- Full-bleed standalone screens (pairing / offline / fatal error) center a single card
 
 ### Whitespace & density
 
-- Comfortable, not sparse: card padding `p-4` / `sm:p-5`
-- Section gaps `gap-3`–`gap-4`, page vertical rhythm `space-y-5`
-- Bottom content clearance `pb-32` for fixed nav
-- Avoid nested “card inside card” (documented product rule)
+- Comfortable, not sparse: page stack ~20 logical px between sections
+- Cards breathe with 16–20 logical px padding
+- Avoid dense multi-column data layouts
 
 ### Grid & alignment
 
-- App column centered: `mx-auto max-w-[480px]`
-- Full-bleed screens (pairing / offline / error) often `max-w-[420px]`
-- Bottom nav: `grid-cols-5`
-- Gallery list: `grid gap-4 sm:grid-cols-2`
-- Forms: single column; dual fields use `grid-cols-2 gap-2`
+- Primary content column: max ~480 logical px, centered on wide tablets
+- Full-bleed screens (pairing / offline / error): max ~420 logical px
+- Bottom nav: 5 equal destinations
+- Gallery list: 1 column phone, 2 columns from ~640 logical px
+- Forms: single column; dual fields use 2-column row with 8 logical px gap
 - Summary widgets: single-column stack
 
 ### Rhythm & balance
@@ -86,88 +80,81 @@ Observed principles from implementation:
 
 ### Consistency mechanisms
 
-| Utility / class | Role |
+| Widget / token | Role |
 | --- | --- |
-| `.app-canvas` | Dot texture background |
-| `.app-shell` | Phone column + isolation |
-| `.paper-card` | Scrapbook surface + dashed inset + hover lift |
-| `.page-header` | Title block + pink→yellow underline bar |
-| `.page-action` | Primary floating action shadow |
-| `.skip-link` | Keyboard skip to `#app-content` |
+| `AppCanvas` | Dot texture background |
+| `AppShell` | Phone column + isolation + bottom nav |
+| `ScrapbookCard` | Scrapbook surface + dashed inset + optional press lift |
+| `PageHeader` | Title block + pink→yellow underline bar |
+| `PageActionButton` | Primary floating action shadow (icon create) |
+| Semantics / skip focus | Keyboard/a11y path to main content where relevant |
 
 ### Responsive philosophy
 
 - Design for portrait phone first
-- Shell caps at 480px; larger viewports show side canvas + soft shell shadow
-- From `sm` (640px): slightly more padding, shell top radius, dual-column gallery
-- Ultrawide: same phone column centered; do not stretch content full width
+- Shell caps at 480 logical px; larger viewports show side canvas + soft shell shadow
+- From ~640 logical px: slightly more padding, shell top radius, dual-column gallery
+- Ultrawide/tablet landscape: same phone column centered; do not stretch content full width
 
 ---
 
 ## 4. Color system
 
-Tokens live in `:root` / `.dark` in `src/index.css` and map to Tailwind via `@theme inline`.
+Tokens live in `AppColors` / `ColorScheme` (light + dark) and are the only allowed product palette sources.
 
 ### Semantic tokens
 
 | Token | Light hex | Dark hex | Usage |
 | --- | --- | --- | --- |
-| `--background` | `#fff8f1` | `#241f25` | App canvas base, theme-color, status bar |
-| `--foreground` | `#332838` | `#fff8f1` | Primary text, focus ring (light) |
-| `--card` | `#fffdf8` | `#2d2730` | Paper surfaces, nav bar, dialogs |
-| `--card-foreground` | `#332838` | `#fff8f1` | Text on cards |
-| `--popover` | `#fffdf8` | `#2d2730` | Popovers, alert dialogs |
-| `--popover-foreground` | `#332838` | `#fff8f1` | Popover text |
-| `--primary` | `#f16f8f` | `#ff9bb2` | Main actions, hold button, brand heart |
-| `--primary-hover` | `#e65f82` | *(not redefined)* | Explicit hover (light) |
-| `--primary-foreground` | `#fffdf8` | `#241f25` | Text on primary |
-| `--secondary` | `#f8eadf` | `#3b3340` | Secondary buttons / soft fills |
-| `--secondary-hover` | `#f2ded0` | *(not redefined)* | Secondary hover (light) |
-| `--secondary-foreground` | `#332838` | `#fff8f1` | Text on secondary |
-| `--muted` | `#f8eadf` | `#3b3340` | Tabs list, muted panels |
-| `--muted-foreground` | `#7d6975` | `#d7c7d0` | Secondary copy, labels |
-| `--accent` | `#ffe89a` | `#d7b948` | Semantic accent (= yellow scrap) |
-| `--accent-foreground` | `#332838` | `#241f25` | Text on accent |
-| `--destructive` | `#d94f5c` | `#ff8791` | Errors, delete actions |
-| `--destructive-hover` | `#c94652` | *(not redefined)* | Destructive hover (light) |
-| `--destructive-foreground` | `#fffdf8` | *(inherits pattern)* | Text on solid destructive |
-| `--border` | `#ead8cf` | `#514453` | Card/input outlines |
-| `--input` | `#fffdf8` | `#3b3340` | Input fill base |
-| `--ring` | `#332838` | `#fff8f1` | Focus outlines |
+| `background` | `#fff8f1` | `#241f25` | App canvas base, system status bar / theme color |
+| `foreground` | `#332838` | `#fff8f1` | Primary text, focus ring (light) |
+| `card` | `#fffdf8` | `#2d2730` | Paper surfaces, nav bar, dialogs |
+| `cardForeground` | `#332838` | `#fff8f1` | Text on cards |
+| `popover` | `#fffdf8` | `#2d2730` | Sheets, menus, alert dialogs |
+| `popoverForeground` | `#332838` | `#fff8f1` | Popover text |
+| `primary` | `#f16f8f` | `#ff9bb2` | Main actions, hold button, brand heart |
+| `primaryHover` | `#e65f82` | *(derive or keep primary)* | Pressed / hovered primary (light) |
+| `primaryForeground` | `#fffdf8` | `#241f25` | Text on primary |
+| `secondary` | `#f8eadf` | `#3b3340` | Secondary buttons / soft fills |
+| `secondaryHover` | `#f2ded0` | *(derive)* | Secondary press (light) |
+| `secondaryForeground` | `#332838` | `#fff8f1` | Text on secondary |
+| `muted` | `#f8eadf` | `#3b3340` | Tabs list, muted panels |
+| `mutedForeground` | `#7d6975` | `#d7c7d0` | Secondary copy, labels |
+| `accent` | `#ffe89a` | `#d7b948` | Semantic accent (= yellow scrap) |
+| `accentForeground` | `#332838` | `#241f25` | Text on accent |
+| `destructive` | `#d94f5c` | `#ff8791` | Errors, delete actions |
+| `destructiveHover` | `#c94652` | *(derive)* | Destructive press (light) |
+| `destructiveForeground` | `#fffdf8` | *(pattern)* | Text on solid destructive |
+| `border` | `#ead8cf` | `#514453` | Card/input outlines |
+| `input` | `#fffdf8` | `#3b3340` | Input fill base |
+| `ring` | `#332838` | `#fff8f1` | Focus outlines |
 
 ### Scrap / decorative accents
 
-| Token | CSS var | Light hex | Tailwind class | Usage |
-| --- | --- | --- | --- | --- |
-| Pink | `--accent-pink` | `#ffd2df` | `bg-scrap-pink` | Greeting card, romantic widgets |
-| Mint | `--accent-mint` | `#bfe8d4` | `bg-scrap-mint` | Calm empty states, success-ish UI |
-| Yellow | `--accent-yellow` | `#ffe89a` | `bg-scrap-yellow` | Sticky default, offline, active nav |
-| Blue | `--accent-blue` | `#b9dcff` | `bg-scrap-blue` | Info callouts, calendar chrome |
-| Lavender | `--accent-lavender` | `#d9c7ff` | `bg-scrap-lavender` | Decorative / filter accents |
-
-Chart tokens `--chart-1…5` mirror scrap accents (light) or brighter dark variants.
-
-### Sidebar tokens
-
-Defined for shadcn compatibility (`--sidebar*`); app primarily uses bottom nav, not a desktop sidebar.
+| Token | Light hex | Flutter constant | Usage |
+| --- | --- | --- | --- |
+| Pink | `#ffd2df` | `AppColors.scrapPink` | Greeting card, romantic widgets |
+| Mint | `#bfe8d4` | `AppColors.scrapMint` | Calm empty states, success-ish UI |
+| Yellow | `#ffe89a` | `AppColors.scrapYellow` | Sticky default, offline, active nav |
+| Blue | `#b9dcff` | `AppColors.scrapBlue` | Info callouts, calendar chrome |
+| Lavender | `#d9c7ff` | `AppColors.scrapLavender` | Decorative / filters sparingly |
 
 ### Overlay / effects
 
-| Usage | Value |
-| --- | --- |
-| Dialog / alert overlay | `bg-black/30` + optional `backdrop-blur-sm` |
-| Body wash (light) | Radial pink + mint gradients over background |
-| Selection | `color-mix(in srgb, primary 28%, transparent)` |
-| Tape | `bg-white/70` |
-| Soft inset panels | `bg-card/60`, `bg-card/70`, `bg-card/75`, `bg-white/45` |
+| Effect | Value | Usage |
+| --- | --- | --- |
+| Dialog scrim | black ~30% + optional blur | Modal barriers |
+| Paper dots | radial / custom painter soft dots on canvas | `AppCanvas` |
+| Dashed inset | soft dashed border inside paper cards | `ScrapbookCard` |
+| Tape fill | white ~70% opacity strip | Washi tape accent |
 
 ### Color rules
 
-1. Prefer semantic tokens (`bg-primary`, `text-muted-foreground`) over raw hex.
-2. Scrap tones are for **surfaces and decoration**, not long body text without checking contrast.
-3. Balance pastels across a page — never all pink or all cream.
-4. Destructive stays soft: often `bg-destructive/10 text-destructive`, not full solid red fills for buttons.
-5. Add new colors to `src/index.css` tokens before using them in components.
+1. Never invent one-off hex in feature widgets — extend tokens first.
+2. Scrap tones are backgrounds; text stays `foreground` / `mutedForeground` unless on solid primary.
+3. Rotate scrap tones across consecutive cards.
+4. Offline / cache warnings prefer yellow scrap.
+5. Destructive actions use destructive tokens, not pure Material red defaults.
 
 ---
 
@@ -175,375 +162,198 @@ Defined for shadcn compatibility (`--sidebar*`); app primarily uses bottom nav, 
 
 ### Font family
 
-| Layer | Value | Notes |
-| --- | --- | --- |
-| **Rendered body (`html` rule)** | `Nunito, ui-rounded, system-ui, sans-serif` | Rounded scrapbook voice |
-| **Tailwind `--font-sans` / `@apply font-sans`** | `'Inter Variable', sans-serif` | Loaded via `@fontsource-variable/inter` |
-| **Heading token** | `--font-heading: var(--font-sans)` | Same stack as sans |
+| Role | Recommendation |
+| --- | --- |
+| **Primary UI** | One soft rounded sans (e.g. Inter, Nunito, or Plus Jakarta Sans) — pick **one**, package via `google_fonts` or bundled assets |
+| **Heading** | Same family, black / extrabold weights |
+| **Mono** | Not used in product UI |
 
-> **Inconsistency (documented):** Inter is imported and mapped to `font-sans`, while the global `html { font-family }` sets Nunito (which is **not** listed in `package.json`). Runtime falls back to `ui-rounded, system-ui` when Nunito is missing. Treat **rounded system / Inter Variable** as the practical stack until fonts are unified.
+Resolve any web-era font split (Inter vs Nunito) by choosing a single primary family and wiring it through `ThemeData.textTheme`.
 
 ### Scale (as used in UI)
 
-| Role | Classes | Approx size | Weight | Usage |
-| --- | --- | --- | --- | --- |
-| Display / page H1 | `text-4xl font-black leading-tight` | 36px | 900 | Page titles, pairing hero, error titles |
-| Pairing alt H1 | `text-3xl font-black leading-tight` | 30px | 900 | Recovery / offline pairing cards |
-| Days counter | `text-3xl font-black` | 30px | 900 | Home anniversary counter |
-| Section H2 | `text-2xl font-black` | 24px | 900 | Section + empty/error headings |
-| Card H2 | `text-xl font-black` | 20px | 900 | Smaller empty states, settings profile |
-| Card H3 | `text-lg font-black` | 18px | 900 | Summary titles, menu cards, note body (notes page) |
-| Note body (home) | `text-base font-extrabold leading-relaxed` | 16px | 800 | Compact sticky previews |
-| Body / description | `text-sm font-bold leading-relaxed` | 14px | 700 | Supporting copy |
-| UI control | `text-sm font-medium` / `font-extrabold` | 14px | 500–800 | Buttons, labels |
-| Caption / eyebrow | `text-xs font-extrabold uppercase tracking-[0.04em]` | 12px | 800 | Eyebrows, author meta |
-| Nav label | `text-[11px] font-extrabold` | 11px | 800 | Bottom tab labels |
-| Dialog title | `text-2xl font-black` | 24px | 900 | Dialog / confirm |
+| Role | Approx size | Weight | Where |
+| --- | --- | --- | --- |
+| Eyebrow | 12–13 sp | extrabold | Page header kicker |
+| Page title | ~36 sp (`text-4xl`) | black | `PageHeader` |
+| Section H2 | ~20–24 sp | black / extrabold | Empty/error titles |
+| Card title | 16–18 sp | extrabold | Summary / settings rows |
+| Body | 14 sp | bold / medium | Descriptions, note body |
+| Meta | 12–13 sp | bold | Author, timestamps |
+| Nav label | 11 sp | extrabold | Bottom nav |
+| Micro / badge | 12 sp | medium | Badges, status pills |
 
 ### Weight vocabulary
 
-| Weight class | Typical use |
+| Weight | Usage |
 | --- | --- |
-| `font-black` (900) | Titles, strong scrapbook headlines |
-| `font-extrabold` (800) | Labels, note text, nav, meta |
-| `font-bold` (700) | Descriptions, muted body |
-| `font-semibold` (600) | Occasional pairing body |
-| `font-medium` (500) | shadcn button/badge default |
+| black (900) | Page titles, dialog titles |
+| extrabold (800) | Nav labels, status pills, select items, strong labels |
+| bold (700) | Body emphasis, descriptions |
+| medium (500) | Default buttons, badges |
+| regular (400) | Rare; prefer medium+ for scrapbook boldness |
 
 ### Line height & tracking
 
-- Titles: `leading-tight`
-- Body: `leading-relaxed`
-- Labels: default / `leading-none` (Label component)
-- Eyebrows: `tracking-[0.04em]` + `uppercase`
+- Body / descriptions: relaxed (~1.4–1.6)
+- Titles: tight-comfortable
+- No aggressive letter-spacing on Indonesian copy
 
 ### Copy rules
 
-- Indonesian casual; short sentences
+- Indonesian casual (`santai`), short sentences
 - Prefer nicknames in greetings
 - Error copy stays human (`Ada yang error nih`, `Notes belum kebuka`)
+- No marketing hero copy on first screens
 
 ---
 
 ## 6. Spacing system
 
-Base unit: **4px** (Tailwind default). No custom `--space-*` CSS variables; spacing is Tailwind scale.
+Base unit: **4 logical pixels**. Expose as `AppSpacing` constants (not ad-hoc magic numbers).
 
-| Step | Tailwind | px | Common usage |
-| --- | --- | --- | --- |
-| 0.5 | `0.5` | 2 | Micro (rare) |
-| 1 | `1` | 4 | Icon/text tight gaps in nav |
-| 1.5 | `1.5` | 6 | Button icon gaps |
-| 2 | `2` | 8 | Chip gaps, form row gaps, button groups |
-| 3 | `3` | 12 | Card internal clusters, summary rows |
-| 4 | `4` | 16 | Default card padding, page header gap, section grids |
-| 5 | `5` | 20 | Page vertical stack (`space-y-5`), larger card padding |
-| 6 | `6` | 24 | Pairing shell padding, dialog gap |
-| 8 | `8` | 32 | Hold-button vertical padding zones |
-| 32 | `pb-32` | 128 | Main content clearance above bottom nav |
+| Step | Logical px | Common usage |
+| --- | --- | --- |
+| 0.5 | 2 | Micro (rare) |
+| 1 | 4 | Icon/text tight gaps in nav |
+| 1.5 | 6 | Button icon gaps |
+| 2 | 8 | Chip gaps, form row gaps, button groups |
+| 3 | 12 | Card internal clusters, summary rows |
+| 4 | 16 | Default card padding, page header gap, section grids |
+| 5 | 20 | Page vertical stack, larger card padding |
+| 6 | 24 | Pairing shell padding, dialog gap |
+| 8 | 32 | Hold-button vertical padding zones |
+| 32 | 128 | Main content clearance above bottom nav |
 
 ### Layout spacing rules
 
 | Context | Pattern |
 | --- | --- |
-| App main | `px-4 pt-6 pb-32 sm:px-5` |
-| Page stack | `space-y-5` (lists sometimes `space-y-4`) |
-| Section stack | `space-y-3` |
-| Card default | `p-4 sm:p-5` via ScrapbookCard |
-| Compact card | `p-3` / `p-4` overrides |
-| Form fields | label → `mt-2` control |
-| Full-width CTA under content | `mt-4 w-full` |
+| App main | horizontal 16 (20 from ~640), top 24, bottom ~128 |
+| Page stack | vertical 20 (lists sometimes 16) |
+| Section stack | vertical 12 |
+| Card default | padding 16 / 20 via `ScrapbookCard` |
+| Compact card | padding 12 / 16 overrides |
+| Form fields | label → 8 gap → control |
+| Full-width CTA under content | top 16, full width |
 
 ---
 
-## 7. Border radius
+## 7. Sizing
 
-### Token scale (`--radius: 0.875rem` ≈ 14px)
+| Element | Size |
+| --- | --- |
+| Min interactive target | ≥40 logical px (prefer 44–56) |
+| Default button height | 40 |
+| Large field / select | 48 |
+| Icon button (page action) | 40–48 |
+| Bottom nav item height | 56 |
+| Color swatch | 32 |
+| Pairing hold button | ~208 (size-52) |
+| Inline icons | 16–18 |
+| Nav / page action icons | 20 |
+| Card icons | 22–24 |
+| Empty/error hero icons | 28 |
+| Pairing hold icon | 52–58 |
 
-| Token | Formula | Approx |
-| --- | --- | --- |
-| `--radius-sm` | `radius - 0.5rem` | ~6px |
-| `--radius-md` | `radius - 0.25rem` | ~10px |
-| `--radius-lg` | `radius` | 14px |
-| `--radius-xl` | `radius + 0.5rem` | ~22px |
-| `--radius-2xl` | `radius * 1.8` | ~25px |
-| `--radius-3xl` | `radius * 2.2` | ~31px |
-| `--radius-4xl` | `radius * 2.6` | ~36px |
+---
+
+## 8. Border radius
+
+### Token scale (base radius ≈ 14)
+
+| Token | Approx |
+| --- | --- |
+| `radiusSm` | ~6 |
+| `radiusMd` | ~10 |
+| `radiusLg` | 14 |
+| `radiusXl` | ~22 |
+| `radius2xl` | ~25 |
+| `radius3xl` | ~31 |
+| `radius4xl` | ~36 |
 
 ### Practical radii in UI
 
 | Element | Radius |
 | --- | --- |
-| Scrapbook / paper cards | `rounded-[1.75rem]` (28px) |
-| Toasts | `rounded-[1.75rem]` |
-| Dialog content | `rounded-[2rem]` |
-| Alert dialog | `rounded-4xl` (+ app override `rounded-[2rem]`) |
-| Pairing / gate shells | `rounded-[2rem]` |
-| Sticky note articles | `rounded-[1.75rem]` (notes) / `rounded-[1.5rem]` (home) |
-| Inner panels / textareas | `rounded-[1.25rem]`–`rounded-[1.15rem]` |
-| Buttons (CVA) | `rounded-4xl` (pill-ish) |
-| Inputs / select trigger | `rounded-3xl` (field chrome often `rounded-[1.15rem]`) |
-| Badges / tabs / pills | `rounded-full` / `rounded-3xl` |
-| Nav items | `rounded-2xl` |
-| Color swatches / hold button | `rounded-full` |
-| Tape strips | `rounded-sm` |
-| App shell ≥640px | `border-radius: 2rem 2rem 0 0` |
+| Scrapbook / paper cards | 28 |
+| Toasts / snackbars | 28 |
+| Dialog / bottom sheet content | 32 |
+| Alert dialog | ~32–36 |
+| Pairing / gate shells | 32 |
+| Sticky note articles | 28 (notes) / 24 (home mini) |
+| Inner panels / text fields multi-line | ~18–20 |
+| Buttons | pill-ish (~999 / large) |
+| Inputs / select trigger | large rounded (~18–28) |
+| Badges / tabs / pills | full / large |
+| Nav items | ~16–20 |
+| Color swatches / hold button | full circle |
+| Tape strips | small (~6) |
+| App shell ≥640 | top corners 32, bottom 0 (if framed) |
 
-**Rule:** Prefer soft, paper-like large radii. Avoid sharp 4–6px corners on primary surfaces.
+**Rule:** Prefer soft, paper-like large radii. Avoid sharp 4–6 corners on primary surfaces.
 
 ---
 
-## 8. Shadow & elevation
+## 9. Elevation & shadow
 
-Warm brown shadow ink: `rgb(103 74 58 / α)`. Primary pink glow: `rgb(241 111 143 / α)`.
+Warm brown shadow ink: `Color.fromRGBO(103, 74, 58, α)`. Primary pink glow: `Color.fromRGBO(241, 111, 143, α)`.
 
-| Level | Value | Usage |
+| Level | Approx | Usage |
 | --- | --- | --- |
-| Soft card | `0 10px 30px rgb(103 74 58 / 0.10)` | ScrapbookCard, notes, toasts |
-| Soft compact | `0 8px 18px … / 0.10–0.12` | Color swatches, active nav, select field |
-| Tape | `0 6–8px 16–20px … / 0.10` | Washi tape accents |
-| Lifted panel | `0 18px 45px … / 0.14–0.16` | Pairing cards, session gate, popover calendar |
-| App shell | `0 24px 80px … / 0.14` | Phone column on wide screens |
-| Bottom nav | `0 -18px 40px … / 0.14` | Upward lift |
-| Offline banner | `0 8px 22px … / 0.10` | Status strip |
-| Card hover (group) | `0 16px 34px … / 0.16` + `translateY(-2px) rotate(-0.15deg)` | Linked ScrapbookCards |
-| Page action | `0 10px 24px rgb(241 111 143 / 0.28)` | `.page-action` FAB-style |
-| Hold button | `0 18px 45px rgb(241 111 143 / 0.35)` | Pairing circle |
-| Border depth | `1px solid var(--border)` | Always present on paper surfaces |
-| shadcn fallbacks | `shadow-lg`, `shadow-xl`, `ring-1 ring-foreground/5` | Popover / alert |
+| Soft card | blur 30, y 10, α 0.10 | `ScrapbookCard`, notes, toasts |
+| Soft compact | blur 18, y 8, α 0.10–0.12 | Color swatches, active nav, select field |
+| Tape | blur 16–20, y 6–8, α 0.10 | Washi tape accents |
+| Lifted panel | blur 45, y 18, α 0.14–0.16 | Pairing cards, session gate, calendar popover |
+| App shell | blur 80, y 24, α 0.14 | Phone column on wide screens |
+| Bottom nav | upward blur 40, y -18, α 0.14 | Bottom chrome |
+| Offline banner | blur 22, y 8, α 0.10 | Status strip |
+| Card press lift | blur 34, y 16, α 0.16 + slight translate/rotate | Tappable summary cards |
+| Page action | pink glow blur 24, y 10, α 0.28 | FAB-style create |
+| Hold button | pink glow blur 45, y 18, α 0.35 | Pairing circle |
+| Border depth | 1 logical px `border` color | Always present on paper surfaces |
 
-**Elevation strategy:** mixed border + soft warm shadow (not flat Material, not heavy neumorphism).
-
----
-
-## 9. Component library
-
-### Foundations
-
-| Piece | Path | Notes |
-| --- | --- | --- |
-| `cn()` | `src/lib/utils.ts` | `clsx` + `tailwind-merge` |
-| Button CVA | `src/components/ui/button-variants.ts` | Shared variants |
-| Note colors | `src/lib/note-colors.ts` | `yellow \| pink \| mint \| blue \| lavender` |
+**Elevation strategy:** mixed border + soft warm shadow (not flat Material defaults, not heavy neumorphism). Prefer `BoxDecoration` / `Material` with custom shadows over default Material elevation cards.
 
 ---
 
-### ScrapbookCard
+## 10. Animation & motion
 
-**Path:** `src/components/scrapbook.tsx`  
-**Purpose:** Primary paper surface for almost all feature content.
+### Global
 
-| Prop | Values | Default |
-| --- | --- | --- |
-| `tone` | `white \| pink \| mint \| yellow \| blue \| lavender` | `white` |
-| `tape` | boolean | `false` |
-| `className` | passthrough | — |
-| `children` | ReactNode | required |
+- Use Flutter `AnimationController`, `AnimatedScale`, `AnimatedOpacity`, `Hero` sparingly
+- When `MediaQuery.disableAnimations` / reduced motion is on, collapse long animations to ~1 frame / instant
 
-**Visual:** `paper-card relative rounded-[1.75rem] border p-4 shadow-[soft] sm:p-5` + tone background.  
-**Tape:** absolute strip `-top-3 left-8 h-6 w-20 rotate-[-3deg] bg-white/70`.  
-**Hover:** when parent has `group`, card lifts slightly (see `.group:hover .paper-card`).  
-**A11y:** decorative tape `aria-hidden`; semantic `<section>`.
+### Timing table
 
----
+| Type | Duration | Easing | Where |
+| --- | --- | --- | --- |
+| Micro press | 150ms | easeOut | Nav active, hold button scale, inputs |
+| Card lift | 180ms | easeOut | Paper card transform/shadow |
+| Overlay | 100ms | default | Dialog / sheet barrier |
+| Dialog enter | short | fade + scale | Modal content |
+| Pulse | infinite | soft | Skeletons |
+| Spin | infinite | linear | Loaders |
+| Hold progress | 3s linear | product logic | Pairing hold |
 
-### Button
+### Motion rules
 
-**Path:** `src/components/ui/button.tsx` + `button-variants.ts`  
-**Purpose:** Primary interactive control (Radix Slot capable).
+1. Prefer transform and opacity (scale `0.98` on press).
+2. Motion responds to user action (press, open, hold) — not ambient loops except skeleton/loader.
+3. Respect reduced motion.
+4. Do not add heavy route transitions that slow perceived performance.
 
-**Variants:** `default` · `outline` · `secondary` · `ghost` · `destructive` · `link`  
-**Sizes:** `default` (h-10) · `xs` · `sm` · `lg` · `icon` · `icon-xs` · `icon-sm` · `icon-lg`
+### Pairing hold
 
-| State | Behavior |
-| --- | --- |
-| Hover | Lighten/darken per variant (`primary/80`, muted fills, etc.) |
-| Active | `translate-y-px` (unless haspopup) |
-| Focus | `border-ring` + `ring-3 ring-ring/30` |
-| Disabled | `opacity-50 pointer-events-none` |
-| Invalid | destructive border/ring |
+- Pointer down starts 3s progress; release cancels
+- Visual: circular primary button, progress feedback (`CircularProgressIndicator` arc or custom painter), status copy below
+- Waiting window: 30s (product logic)
 
-**Visual behavior:** `rounded-4xl`, `text-sm font-medium`, icon default `size-4`.  
-**App pattern:** full-width primary in forms; `size="icon"` for page create / row actions; destructive soft pink-red.
+### Page transition
 
----
-
-### Badge
-
-**Path:** `src/components/ui/badge.tsx`  
-**Variants:** `default` · `secondary` · `destructive` · `outline` · `ghost` · `link`  
-**Visual:** `h-5 rounded-3xl text-xs font-medium px-2`.
-
----
-
-### Input
-
-**Path:** `src/components/ui/input.tsx`  
-**Visual:** `h-9 rounded-3xl border-transparent bg-input/50`, focus ring, `md:text-sm`.  
-**App overrides:** often `rounded-3xl` / taller field chrome via className; pairing uses `mt-2 rounded-3xl`.
-
-Global CSS also styles native `input:focus-visible` with primary soft glow.
-
----
-
-### Textarea
-
-**Path:** `src/components/ui/textarea.tsx`  
-**Visual:** `min-h-16 rounded-2xl bg-input/50`, `field-sizing-content`, `resize-none`.  
-**App pattern:** note editors use `min-h-24 rounded-[1.25rem]`, maxLength 280.
-
----
-
-### Label
-
-**Path:** `src/components/ui/label.tsx`  
-**Visual:** `text-sm font-medium leading-none`; disabled peer opacity.
-
-App often uses raw `<span className="text-sm font-extrabold text-muted-foreground">` instead of Label.
-
----
-
-### Dialog
-
-**Path:** `src/components/ui/dialog.tsx`  
-**Parts:** Root, Content, Header, Title, Description (+ close button).
-
-| Part | Style |
-| --- | --- |
-| Overlay | `bg-black/30` blur, fade in/out |
-| Content | `max-w-md`, `rounded-[2rem]`, `p-4 sm:p-5`, zoom+fade, `max-h-[88dvh]` |
-| Title | `text-2xl font-black` |
-| Description | `text-sm font-bold leading-relaxed text-muted-foreground` |
-| Close | ghost `icon-sm`, `aria-label="Tutup dialog"` |
-
----
-
-### AlertDialog + ConfirmAlertDialog
-
-**Paths:** `alert-dialog.tsx`, `confirm-alert-dialog.tsx`  
-**Purpose:** Destructive / confirm flows (delete note, etc.).
-
-**ConfirmAlertDialog props:** `title`, `description`, `isOpen`, `onConfirm`, `onCancel`, optional labels, `confirmDisabled`, `children`.  
-**Defaults:** cancel `Batal`, confirm `Hapus` with `variant="destructive"`.  
-**Chrome:** `rounded-[2rem] bg-card`, title `text-2xl font-black`.
-
----
-
-### Tabs
-
-**Path:** `src/components/ui/tabs.tsx`  
-**List variants:** `default` (pill on `bg-muted`) · `line`  
-**Trigger:** rounded-full, active `bg-background`, focus ring.  
-**Used on:** Dates (list vs calendar).
-
----
-
-### Select / SelectField
-
-**Paths:** `select.tsx`, `select-field.tsx`  
-**SelectField:** app-styled full-width trigger `h-12 rounded-[1.15rem] bg-card font-bold` + warm shadow; items `font-extrabold`, focus `bg-scrap-yellow`.
-
----
-
-### Popover
-
-**Path:** `popover.tsx`  
-**Content:** `w-72 rounded-3xl p-4 shadow-lg ring-1`, zoom/fade/slide, `duration-100`, `z-[70]`.
-
----
-
-### Calendar + DatePickerInput + DateTimePickerInput
-
-**Paths:** `calendar.tsx`, `date-picker-input.tsx`, `date-time-picker-input.tsx`  
-**Calendar:** react-day-picker, cell radius `1rem`, ghost nav buttons, `bg-card`.  
-**DatePickerInput:** outline button `h-12 rounded-[1.15rem]`, id-ID medium date, popover with lifted shadow.
-
----
-
-### Sonner Toaster
-
-**Path:** `sonner.tsx`  
-**Position:** `top-center`, `richColors`.  
-**Toast chrome:** scrapbook radius + soft card shadow; action uses primary.
-
----
-
-### AppShell
-
-**Path:** `app-shell.tsx`  
-**Purpose:** Authenticated chrome — canvas, 480px shell, main outlet, offline notice, bottom nav.
-
-**Nav items:** Home · Notes · Gallery · Dates · More (→ `/settings`)  
-**Active tab:** `bg-scrap-yellow text-foreground` + soft shadow  
-**Tab target:** `h-14`, icon 20px `strokeWidth={2.2}`, label 11px extrabold  
-**A11y:** `aria-label="Navigasi utama"`, skip link, icons `aria-hidden`
-
----
-
-### OfflineNotice / OfflineEmptyState
-
-**Path:** `offline-notice.tsx`  
-**Notice:** yellow banner, CloudOff icon, `role="status"` `aria-live="polite"`.  
-**Empty:** ScrapbookCard yellow + tape for no-cache pages.
-
----
-
-### SessionGate
-
-**Path:** `session-gate.tsx`  
-**States:** checking / ready / blocked / temporary-error  
-**UI:** centered card `rounded-[2rem]` lifted shadow; retry button.
-
----
-
-### ErrorBoundary
-
-**Path:** `error-boundary.tsx`  
-**UI:** full-canvas ScrapbookCard pink + tape; icon in `rounded-2xl`; dual CTA retry / home.
-
----
-
-### Loading skeletons
-
-**Path:** `loading-skeleton.tsx`  
-**Primitives:** `SkeletonBlock` — `animate-pulse rounded-full bg-card/65`  
-**Exports:** `HomeSkeleton`, `NotesSkeleton`, `DatesListSkeleton`, `DatesCalendarSkeleton`, `GallerySkeleton`, `PairingStatusSkeleton`, `SettingsSkeleton`, etc.  
-**Rule:** Skeletons mirror real layout tones and tape so loading feels on-brand. `aria-busy="true"`, blocks `aria-hidden`.
-
----
-
-### Page-level composite patterns
-
-| Pattern | Where | Description |
-| --- | --- | --- |
-| **Page header** | notes, gallery, dates, lists, settings | `.page-header` + eyebrow + `text-4xl` title + optional `.page-action` icon button |
-| **Status pill** | home, notes, gallery, lists, dates | `rounded-full bg-scrap-yellow px-4 py-2 text-xs font-extrabold` for cache/refresh warnings |
-| **Empty state card** | all feature pages | ScrapbookCard mint/pink + H2 + body + full-width CTA |
-| **Error state card** | all feature pages | ScrapbookCard pink + tape + retry secondary button |
-| **Color picker** | home, notes | 5 circular swatches `size-8`, selected `scale-110 ring-2 ring-foreground` |
-| **Sticky note card** | notes, home | Tone fill + tape + author meta + optional edit/delete |
-| **SummaryCard** | home | Linked ScrapbookCard with icon, meta, title, description |
-| **SettingsMenuCard** | settings | Linked toned card + chevron |
-| **Hold pairing button** | pairing | `size-52` circle, primary fill, progress conic/overlay, HeartHandshake / spinner |
-| **Coming soon** | coming-soon.tsx | Centered toned card + Sparkles |
-
----
-
-## 10. Layout system
-
-| Token / pattern | Value |
-| --- | --- |
-| Min viewport width | `320px` (`html`/`body`) |
-| App shell max width | `480px` |
-| Standalone card max | `420px` (pairing, offline, error) |
-| Dialog max | `max-w-md` / alert `max-w-xs`→`sm:max-w-md` |
-| Main padding | `px-4 sm:px-5`, `pt-6`, `pb-32` |
-| Bottom nav | fixed, same `max-w-[480px]`, safe-area bottom |
-| Breakpoints used | default mobile; `sm:` (≥640) for padding, 2-col gallery, shell radius, dual buttons |
-| Orientation | PWA `portrait` preferred |
-| Height | `min-h-dvh`, content `100dvh` calculations for pairing |
-
-**Do not** expand feature layouts to full desktop multi-column dashboards; keep the scrapbook phone column.
+- Default: light fade / shared-axis short via `go_router` / `CustomTransitionPage`
+- Avoid full-screen slide stacks that feel slow
+- Pairing → home: brief success state then navigate
 
 ---
 
@@ -551,164 +361,412 @@ App often uses raw `<span className="text-sm font-extrabold text-muted-foregroun
 
 | Rule | Detail |
 | --- | --- |
-| **Library** | `lucide-react` only (`components.json` → `iconLibrary: "lucide"`) |
-| **Sizes** | 16–18 (inline actions), 20 (nav / page action), 22–24 (card icons), 28 (empty/error heroes), 52–58 (pairing hold) |
-| **Stroke** | Default lucide; nav & pairing often `strokeWidth={2.2}` |
-| **Color** | Inherit text color; destructive icons `text-destructive` |
-| **A11y** | Decorative icons `aria-hidden="true"`; icon-only buttons need `aria-label` (Indonesian) |
-| **Loading** | `LoaderCircle` + `animate-spin` |
+| **Library** | One icon set only (recommended: `lucide_icons` or equivalent stroke set matching lucide names) |
+| **Sizes** | 16–18 (inline), 20 (nav / page action), 22–24 (card), 28 (empty/error), 52–58 (pairing hold) |
+| **Stroke** | Default; nav & pairing often ~2.2 |
+| **Color** | Inherit text color; destructive icons use `destructive` |
+| **A11y** | Decorative icons excluded from semantics; icon-only controls need Indonesian `Semantics` / `tooltip` labels |
+| **Loading** | circular progress / spinning loader icon |
 
-Common icons: `Home`, `NotebookText`, `Images`, `CalendarHeart`, `MoreHorizontal`, `Plus`, `Send`, `Save`, `PencilLine`, `Trash2`, `HeartHandshake`, `CloudOff`, `Sparkles`, `RotateCcw`, etc.
-
----
-
-## 12. Motion
-
-### Global
-
-- `tw-animate-css` + shadcn animate utilities (`animate-in`, `fade-in-0`, `zoom-in-95`, …)
-- `@media (prefers-reduced-motion: reduce)` forces animation/transition duration ≈ 1ms
-
-### Timing table (observed)
-
-| Type | Duration | Easing | Where |
-| --- | --- | --- | --- |
-| Micro press | 150ms | `ease-out` | Nav active, hold button scale, skip-link, inputs |
-| Card lift | 180ms | `ease-out` | `.paper-card` transform/shadow |
-| Overlay | 100ms | default animate | Alert/dialog/popover |
-| Dialog enter | tw animate | zoom+fade | Dialog content |
-| Pulse | infinite | Tailwind | Skeletons `animate-pulse` |
-| Spin | infinite | Tailwind | Loaders `animate-spin` |
-| Hold progress | 3s linear (logic) | JS interval | Pairing hold |
-
-### Motion rules
-
-1. Prefer `transform` and `opacity` (card hover, active scale `0.98`).
-2. Motion responds to user action (press, open, hold) — not ambient loops except skeleton/loader.
-3. Respect reduced motion.
-4. Do not add heavy page-route transitions that slow perceived performance.
-
-### Pairing hold
-
-- Pointer down starts 3s progress; release cancels
-- Visual: circular primary button, progress feedback, status copy below
-- Waiting window: 30s (product logic)
+Common icons: Home, Notebook, Images, CalendarHeart, MoreHorizontal, Plus, Send, Save, Pencil, Trash, HeartHandshake, CloudOff, Sparkles, RotateCcw, etc.
 
 ---
 
-## 13. Interaction
+## 12. Component specification
+
+Recommended Flutter widgets / custom components. Paths are target locations under `lib/`.
+
+### Foundations
+
+| Piece | Target | Notes |
+| --- | --- | --- |
+| Theme tokens | `lib/core/theme/app_colors.dart`, `app_spacing.dart`, `app_radii.dart`, `app_shadows.dart`, `app_typography.dart` | Design tokens |
+| `AppTheme` | `lib/core/theme/app_theme.dart` | `ThemeData` light/dark |
+| Note colors | `lib/features/notes/domain/note_colors.dart` | `yellow \| pink \| mint \| blue \| lavender` |
+
+---
+
+### ScrapbookCard
+
+**Target:** `lib/shared/widgets/scrapbook_card.dart`  
+**Base:** custom `StatelessWidget` / `Container` + `CustomPaint` dashed border (not default `Card`)  
+**Purpose:** Primary paper surface for almost all feature content.
+
+| Prop | Values | Default |
+| --- | --- | --- |
+| `tone` | `white \| pink \| mint \| yellow \| blue \| lavender` | `white` |
+| `tape` | bool | `false` |
+| `onTap` | VoidCallback? | null |
+| `child` | Widget | required |
+| `padding` | EdgeInsets? | 16 / 20 |
+
+**Visual:** relative, radius 28, border, soft paper shadow, tone background.  
+**Tape:** absolute strip near top, slight rotation, white ~70%.  
+**Press:** optional slight lift when tappable.  
+**A11y:** decorative tape excluded from semantics; prefer semantic section via parent.
+
+---
+
+### AppButton
+
+**Target:** `lib/shared/widgets/app_button.dart`  
+**Base:** `FilledButton` / `OutlinedButton` / `TextButton` themed, or custom  
+**Variants:** `primary` · `outline` · `secondary` · `ghost` · `destructive` · `link`  
+**Sizes:** default (h 40) · xs · sm · lg · icon · iconSm · iconLg
+
+| State | Behavior |
+| --- | --- |
+| Hover / highlight | Lighten/darken per variant (desktop/web pointer) |
+| Pressed | slight translate down or scale |
+| Focus | border ring + soft ring glow |
+| Disabled | opacity 50, ignore pointers |
+| Invalid | destructive border/ring |
+
+**App pattern:** full-width primary in forms; icon size for page create / row actions; destructive soft pink-red.
+
+---
+
+### AppBadge
+
+**Target:** `lib/shared/widgets/app_badge.dart`  
+**Base:** compact `Container` / `Chip`  
+**Visual:** height ~20, large radius, 12 sp medium, horizontal padding 8.
+
+---
+
+### AppTextField
+
+**Target:** `lib/shared/widgets/app_text_field.dart`  
+**Base:** `TextFormField` themed  
+**Visual:** height ~36–48, large radius, transparent/soft border, `input` fill, focus ring.  
+**Pairing:** larger field, top margin after label.
+
+Focus: soft primary glow via `InputDecoration` / `Focus` theme.
+
+---
+
+### AppTextArea
+
+**Target:** `lib/shared/widgets/app_text_area.dart`  
+**Base:** `TextFormField` multi-line  
+**Visual:** min height ~64–96, radius ~20, no resize handle (mobile).  
+**Notes editor:** min height ~96, maxLength 280.
+
+---
+
+### AppLabel
+
+**Target:** `lib/shared/widgets/app_label.dart`  
+**Visual:** 14 sp medium; strong labels may use extrabold muted.
+
+---
+
+### AppDialog
+
+**Target:** `lib/shared/widgets/app_dialog.dart`  
+**API:** `showAppDialog` / `showModalBottomSheet` with scrapbook chrome  
+**Parts:** barrier, content, header, title, description, close.
+
+| Part | Style |
+| --- | --- |
+| Barrier | black 30%, optional blur |
+| Content | max width ~md, radius 32, padding 16–20, max height ~88% viewport |
+| Title | ~24 sp black |
+| Description | 14 sp bold relaxed muted |
+| Close | ghost icon, semantics “Tutup dialog” |
+
+Prefer centered dialog on phone for short forms; bottom sheet is acceptable when keyboard-heavy if chrome stays scrapbook.
+
+---
+
+### ConfirmAlertDialog
+
+**Target:** `lib/shared/widgets/confirm_alert_dialog.dart`  
+**Purpose:** Destructive / confirm flows (delete note, etc.).
+
+**Props:** `title`, `description`, `onConfirm`, `onCancel`, optional labels, `confirmDisabled`, optional body.  
+**Defaults:** cancel `Batal`, confirm `Hapus` with destructive variant.  
+**Chrome:** radius 32, card surface, title black.
+
+---
+
+### AppTabs
+
+**Target:** `lib/shared/widgets/app_tabs.dart`  
+**Base:** `TabBar` / custom pill segmented control  
+**List variants:** pill on muted · line  
+**Trigger:** rounded full, active background surface, focus ring.  
+**Used on:** Dates (list vs calendar).
+
+---
+
+### AppSelect / AppSelectField
+
+**Target:** `lib/shared/widgets/app_select_field.dart`  
+**Base:** `DropdownButtonFormField` or custom menu  
+**SelectField:** full-width trigger height 48, radius ~18, card fill, bold, warm shadow; items extrabold; focused/hover yellow scrap.
+
+---
+
+### AppPopover / menu surfaces
+
+**Target:** themed `PopupMenu` / custom overlay  
+**Content:** width ~288, radius large, padding 16, elevated shadow, z above sheets.
+
+---
+
+### AppCalendar + DatePickerField + DateTimePickerField
+
+**Target:** `lib/shared/widgets/date_picker_field.dart` etc.  
+**Base:** `showDatePicker` customized or `table_calendar` / custom month grid with scrapbook cells  
+**Date field:** outline button height 48, radius ~18, locale `id_ID` medium date, elevated popover/sheet.
+
+---
+
+### AppToaster / Snackbar
+
+**Target:** `lib/shared/widgets/app_toast.dart` or `ScaffoldMessenger` theme  
+**Position:** top-center preferred (or floating snackbar)  
+**Chrome:** scrapbook radius + soft card shadow; action uses primary.
+
+---
+
+### AppShell
+
+**Target:** `lib/shared/widgets/app_shell.dart`  
+**Purpose:** Authenticated chrome — canvas, ~480 shell, main body, offline notice, bottom nav.
+
+**Nav items:** Home · Notes · Gallery · Dates · More (→ settings)  
+**Active tab:** yellow scrap fill + soft shadow  
+**Tab target:** height 56, icon 20 stroke ~2.2, label 11 extrabold  
+**A11y:** semantics label “Navigasi utama”; icons decorative when labels present  
+**Safe area:** bottom inset via `SafeArea` / `MediaQuery.viewPadding`
+
+---
+
+### OfflineNotice / OfflineEmptyState
+
+**Target:** `lib/shared/widgets/offline_notice.dart`  
+**Notice:** yellow banner, CloudOff icon, polite live region semantics.  
+**Empty:** `ScrapbookCard` yellow + tape for no-cache pages.
+
+---
+
+### SessionGate
+
+**Target:** `lib/features/auth/presentation/session_gate.dart`  
+**States:** checking / ready / blocked / temporary-error  
+**UI:** centered card radius 32 lifted shadow; retry button.
+
+---
+
+### AppErrorBoundary / fatal error UI
+
+**Target:** `lib/shared/widgets/app_error_view.dart` (+ Flutter `ErrorWidget.builder` / zone handling)  
+**UI:** full-canvas `ScrapbookCard` pink + tape; icon in rounded square; dual CTA retry / home.
+
+---
+
+### Loading skeletons
+
+**Target:** `lib/shared/widgets/loading_skeleton.dart`  
+**Primitives:** pulse blocks, rounded, card/65 fill  
+**Exports:** `HomeSkeleton`, `NotesSkeleton`, `DatesListSkeleton`, `DatesCalendarSkeleton`, `GallerySkeleton`, `PairingStatusSkeleton`, `SettingsSkeleton`, etc.  
+**Rule:** Skeletons mirror real layout tones and tape so loading feels on-brand. Mark busy for a11y; decorative blocks ignored by semantics.
+
+---
+
+### Page-level composite patterns
+
+| Pattern | Where | Flutter notes |
+| --- | --- | --- |
+| **Page header** | notes, gallery, dates, lists, settings | `PageHeader` + eyebrow + large black title + optional `PageActionButton` |
+| **Status pill** | home, notes, gallery, lists, dates | pill yellow scrap, 12 sp extrabold for cache/refresh warnings |
+| **Empty state card** | all feature pages | `ScrapbookCard` mint/pink + H2 + body + full-width CTA |
+| **Error state card** | all feature pages | `ScrapbookCard` pink + tape + retry secondary button |
+| **Color picker** | home, notes | 5 circular swatches size 32, selected scale 1.1 + ring |
+| **Sticky note card** | notes, home | Tone fill + tape + author meta + optional edit/delete |
+| **SummaryCard** | home | Tappable `ScrapbookCard` with icon, meta, title, description |
+| **SettingsMenuCard** | settings | Tappable toned card + chevron |
+| **Hold pairing button** | pairing | ~208 circle, primary fill, progress arc, HeartHandshake / spinner |
+| **Coming soon** | shared | Centered toned card + Sparkles |
+
+---
+
+## 13. Layout rules
+
+| Token / pattern | Value |
+| --- | --- |
+| Min comfortable width | ~320 logical px |
+| App shell max width | 480 logical px |
+| Standalone card max | 420 (pairing, offline, error) |
+| Dialog max | ~md; alerts slightly tighter |
+| Main padding | 16 / 20 horizontal, top 24, bottom ~128 |
+| Bottom nav | fixed, same max width, safe-area bottom |
+| Breakpoints | phone default; ≥640 padding / 2-col gallery / dual buttons |
+| Orientation | portrait preferred |
+| Height | full viewport; pairing uses full height calculations |
+
+**Do not** expand feature layouts to full desktop multi-column dashboards; keep the scrapbook phone column (`ConstrainedBox` + `Center`).
+
+---
+
+## 14. Interaction rules
 
 | State | Pattern |
 | --- | --- |
-| **Hover** | Buttons recolor; group cards lift+tilt; links/chevrons imply navigation |
-| **Active / pressed** | `active:scale-[0.98]` (nav, hold); buttons `translate-y-px` |
-| **Focus visible** | Ring tokens on controls; nav `outline-2 outline-ring`; skip-link reveals |
-| **Disabled** | `opacity-50`, no pointer; offline disables create/upload |
-| **Loading** | Spinner in button, skeleton pages, `aria-busy` on skeleton roots |
-| **Selected** | Color swatch scale+ring; tabs `data-active`; nav yellow fill |
-| **Invalid** | `text-destructive` messages; `aria-invalid` rings on inputs |
-| **Keyboard** | Radix dialogs/selects/tabs; Enter submits nickname on pairing |
-| **Touch** | `-webkit-tap-highlight-color: transparent`; large hold target (`size-52`) |
+| **Hover** (desktop/web) | Buttons recolor; group cards lift+tilt |
+| **Pressed** | scale ~0.98 (nav, hold); slight translate on buttons |
+| **Focus visible** | Ring tokens on controls |
+| **Disabled** | opacity 50; offline disables create/upload |
+| **Loading** | Spinner in button, skeleton pages, busy semantics |
+| **Selected** | Color swatch scale+ring; tabs active; nav yellow fill |
+| **Invalid** | destructive text messages; invalid borders on inputs |
+| **Keyboard** | form submit on pairing nickname; dialogs trap focus where applicable |
+| **Touch** | no ugly tap flash; large hold target (~208) |
 
 ---
 
-## 14. Accessibility
+## 15. Accessibility
 
 | Area | Implementation |
 | --- | --- |
-| **Lang** | `<html lang="id">` |
-| **Skip link** | “Langsung ke konten” → `#app-content` |
-| **Semantics** | `<main>`, `<nav aria-label>`, `<header>`, `<section>`, `<article>` for notes |
-| **Live regions** | Offline notice, session checking, some status messages `aria-live="polite"` |
-| **Alerts** | Session temporary error `role="alert"` |
-| **Icon buttons** | Indonesian `aria-label` (edit, hapus, upload, …) |
-| **Pressed state** | Color swatches `aria-pressed` |
-| **Focus** | Visible rings; dialog focus trap via Radix |
-| **Contrast** | Dark plum text on cream; muted mauve secondary; verify scrap tone + text pairs |
-| **Touch targets** | Nav `h-14`; buttons ≥h-9/h-10; hold `size-52` |
-| **Safe area** | Bottom nav `pb-[max(0.875rem,env(safe-area-inset-bottom))]` |
-| **Reduced motion** | Global CSS override |
+| **Lang** | App locale `id` (`MaterialApp.locale` / l10n) |
+| **Semantics** | Meaningful labels on icon buttons; exclude decorative tape/icons |
+| **Live regions** | Offline notice, session checking via polite announcements where useful |
+| **Alerts** | Temporary session error as assertive alert |
+| **Icon buttons** | Indonesian labels (edit, hapus, upload, …) |
+| **Pressed state** | Color swatches expose selected/pressed |
+| **Focus** | Visible focus; modal focus scope |
+| **Contrast** | Dark plum text on cream; verify scrap tone + text pairs |
+| **Touch targets** | Nav 56; buttons ≥36–40; hold ~208 |
+| **Safe area** | `SafeArea` / view padding for notches and home indicator |
+| **Reduced motion** | Honor platform disable-animations |
 
 ---
 
-## 15. Responsive behavior
+## 16. Responsive rules
 
 | Viewport | Behavior |
 | --- | --- |
-| **Mobile (&lt;640)** | Single column, full-bleed shell edges, bottom nav, `px-4` |
-| **Tablet / sm (≥640)** | Shell top rounded, `sm:px-5`, gallery 2 columns, dual button rows on error screens |
-| **Laptop / desktop** | Centered 480px column, side dotted canvas, deep shell shadow — still “phone UI” |
+| **Phone (&lt;640)** | Single column, full-bleed shell edges, bottom nav, padding 16 |
+| **Tablet / sm (≥640)** | Shell top rounded, padding 20, gallery 2 columns, dual button rows on error screens |
+| **Large tablet** | Centered 480 column, side dotted canvas, deep shell shadow — still “phone UI” |
 | **Ultrawide** | Same; extra margin is empty canvas, not wider content |
-PWA: standalone, portrait, theme/background `#fff8f1`.
+
+System UI: status bar / navigation bar colors aligned to `#fff8f1` light theme.
 
 ---
 
-## 16. Design tokens
+## 17. Loading / empty / error states
 
-### CSS variables (source of truth: `src/index.css`)
+| State | Pattern |
+| --- | --- |
+| **Loading (no cache)** | Layout-matched skeleton, not blank spinner-only full screen |
+| **Loading (with cache)** | Show cached content + yellow status pill “Lagi nyegerin data...” |
+| **Empty** | Mint/pink scrap card + short copy + full-width CTA |
+| **Error** | Pink scrap card + tape + human copy + retry |
+| **Offline + cache** | Offline notice + readable cached data; mutations blocked |
+| **Offline + no cache** | Offline empty: no endless skeleton; ask to reconnect |
+| **Pairing waiting** | Countdown + polling status; never silent |
+
+Never silent failure. Never infinite spinner without explanation.
+
+---
+
+## 18. Theme architecture
 
 ```text
-/* surfaces */
---background --foreground --card --card-foreground
---popover --popover-foreground --muted --muted-foreground
---sidebar --sidebar-* 
-
-/* actions */
---primary --primary-hover --primary-foreground
---secondary --secondary-hover --secondary-foreground
---accent --accent-foreground
---destructive --destructive-hover --destructive-foreground
-
-/* chrome */
---border --input --ring
-
-/* scrap accents */
---accent-pink --accent-mint --accent-yellow --accent-blue --accent-lavender
---chart-1 … --chart-5
-
-/* radius */
---radius (--radius-sm … --radius-4xl derived)
-
-/* typography theme */
---font-sans --font-heading
+lib/core/theme/
+  app_colors.dart       # semantic + scrap accents
+  app_spacing.dart      # 4px scale
+  app_radii.dart
+  app_shadows.dart
+  app_typography.dart
+  app_theme.dart        # ThemeData light/dark from tokens
 ```
 
-### Tailwind color bridges
+- `ThemeData.colorScheme` maps semantic tokens
+- Extensions (`ThemeExtension`) hold scrap accents, paper shadows, domain tones
+- Feature widgets read `Theme.of(context)` / extensions — no raw hex
+- Dark mode tokens exist for parity; ship only if product enables dark
 
-`bg-background`, `text-foreground`, `bg-primary`, `bg-scrap-pink|mint|yellow|blue|lavender`, etc.
+### Domain tokens
 
-### Domain tokens (TS)
-
-```ts
-noteColors = ['yellow', 'pink', 'mint', 'blue', 'lavender']
-noteToneClasses → bg-scrap-*
+```dart
+const noteColors = ['yellow', 'pink', 'mint', 'blue', 'lavender'];
+// map → AppColors.scrap*
 ```
 
-### Asset / brand constants
+### Brand constants
 
 | Item | Value |
 | --- | --- |
-| Theme color | `#fff8f1` |
-| App icon | Pastel paper + heart (`public/app-icon.svg`) |
-| Shadow ink | `103 74 58` |
-| Primary glow | `241 111 143` |
+| Theme / system color | `#fff8f1` |
+| App icon | Pastel paper + heart |
+| Shadow ink | `103, 74, 58` |
+| Primary glow | `241, 111, 143` |
 
 ---
 
-## 17. Dos & don'ts
+## 19. Widget guidelines
+
+1. Prefer composition of shared scrapbook widgets over one-off decorations.
+2. One icon library only.
+3. Full-width primary CTAs inside cards; icon FAB for page-level create.
+4. Keep Indonesian casual copy in UI strings (l10n-ready structure even if single locale).
+5. Mirror web product patterns: page header, tones, status pill, empty/error cards.
+6. Use Riverpod for state; keep widgets rebuild-friendly and dumb where possible.
+7. Navigation via `go_router`; shell route hosts bottom nav.
+
+---
+
+## 20. Implementation notes
+
+| Web concept | Flutter equivalent |
+| --- | --- |
+| HTML structure | Widget tree |
+| CSS / Tailwind | `ThemeData`, tokens, `BoxDecoration` |
+| shadcn/ui | Shared widgets under `lib/shared/widgets` |
+| React Router | `go_router` |
+| fetch / axios | `dio` |
+| localStorage (session) | `flutter_secure_storage` for `memberId` + `sessionToken` |
+| sessionStorage (list cache) | in-memory cache + optional `shared_preferences` / Hive with TTL (gallery thumbnails memory-only) |
+| Redux / Context | Riverpod |
+| lucide-react | lucide_icons (or one stroke set) |
+| PWA install | native install via store / sideload |
+| `prefers-reduced-motion` | `MediaQuery.disableAnimations` |
+| `env(safe-area-inset-*)` | `SafeArea` / `MediaQuery.viewPadding` |
+| Sonner toast | themed `SnackBar` / toast package with scrapbook chrome |
+| ErrorBoundary | `FlutterError` / zone + `AppErrorView` |
+
+**Recommended package baseline (documentation intent, not lockfile):**
+
+- `flutter_riverpod`
+- `go_router`
+- `dio`
+- `flutter_secure_storage`
+- `shared_preferences` (non-sensitive cache / flags)
+- `google_fonts` or bundled font assets
+- `lucide_icons` (or equivalent)
+- `intl` (id_ID dates)
+
+---
+
+## 21. Dos & don'ts
 
 ### Do
 
 - Use `ScrapbookCard` + scrap tones for feature surfaces
-- Keep pages in the `space-y-5` + page-header pattern
+- Keep pages in vertical stack + page-header pattern
 - Rotate pastel tones; default sticky yellow is OK, not mandatory everywhere
 - Write short Indonesian casual copy
-- Full-width primary CTAs inside cards; icon FAB for page create
+- Full-width primary CTAs inside cards; icon create for page actions
 - Show empty/error/offline explicitly with retry or CTA
-- Use lucide icons with `aria-hidden` + labeled buttons
-- Stay inside the 480px shell mental model
+- Use one icon set with labeled icon-only controls
+- Stay inside the 480 shell mental model
 - Animate lightly; honor reduced motion
-- Put new colors in CSS tokens first
+- Put new colors in theme tokens first
 
 ### Don't
 
@@ -718,64 +776,61 @@ noteToneClasses → bg-scrap-*
 - Don't introduce a second icon library
 - Don't stretch layouts to full desktop width
 - Don't use sharp tiny radii on primary surfaces
-- Don't hardcode random hex in components when a token exists
+- Don't hardcode random hex in widgets when a token exists
 - Don't hide empty sections as endless spinners
 - Don't add noisy ambient animations
-- Don't mix English corporate UI chrome into primary flows (errors may be bilingual today — prefer ID)
+- Don't mix English corporate UI chrome into primary flows (prefer ID)
 
 ---
 
-## 18. Future guideline
+## 22. Future guideline
 
-When adding a **new feature or component**:
+When adding a **new feature or widget**:
 
-1. **Start from patterns** — page header, ScrapbookCard tones, status pill, empty/error cards, Dialog or ConfirmAlertDialog.
-2. **Tokens first** — extend `src/index.css` / note-color maps; avoid one-off palettes.
-3. **Mobile column** — content must read well at 360×800 inside `max-w-[480px]`.
-4. **Tone map** — assign scrap tones deliberately (e.g. info→blue, calm empty→mint, warning/offline→yellow, romantic→pink).
-5. **Typography** — eyebrow → `text-4xl font-black` title → `text-sm font-bold` description.
-6. **Controls** — reuse Button variants, Input/Textarea/SelectField, DatePickerInput.
+1. **Start from patterns** — page header, ScrapbookCard tones, status pill, empty/error cards, AppDialog or ConfirmAlertDialog.
+2. **Tokens first** — extend theme tokens / note-color maps; avoid one-off palettes.
+3. **Mobile column** — content must read well at 360×800 inside max 480 width.
+4. **Tone map** — assign scrap tones deliberately (info→blue, calm empty→mint, warning/offline→yellow, romantic→pink).
+5. **Typography** — eyebrow → large black title → bold muted description.
+6. **Controls** — reuse AppButton, AppTextField/AppTextArea/AppSelectField, date fields.
 7. **Motion** — 100–180ms ease-out; no new animation libraries without need.
-8. **A11y** — labels in Indonesian, focus rings, 40px+ targets, decorative icons hidden.
-9. **Skeleton** — add a matching skeleton in `loading-skeleton.tsx` if the page loads async.
-10. **Document** — update this `design.md` when introducing a new repeated pattern (promote one-offs to rules).
+8. **A11y** — Indonesian labels, focus rings, 40px+ targets, decorative icons hidden.
+9. **Skeleton** — add a matching skeleton if the page loads async.
+10. **Document** — update this `design.md` when introducing a new repeated pattern.
 
-### Component checklist (PR)
+### Widget checklist (PR)
 
 - [ ] Uses existing tokens / ScrapbookCard where appropriate  
 - [ ] Matches spacing scale and radius language  
 - [ ] Empty, error, loading, offline considered  
 - [ ] Icon-only controls labeled  
-- [ ] Works in 480px shell + bottom nav clearance  
+- [ ] Works in 480 shell + bottom nav clearance  
 - [ ] No contrast regressions on scrap tones  
 
 ---
 
-## Design inconsistencies
+## Design inconsistencies (carry-over)
 
-Documented for alignment later — **not changed in code by this doc**.
+Documented for alignment later — **not product redesign**.
 
 | Issue | Detail | Recommendation |
 | --- | --- | --- |
-| **Font split** | `html` sets Nunito (not packaged); Tailwind `font-sans` is Inter Variable; `@layer base` applies `font-sans` | Pick one primary font, load it, align `html` + `--font-sans` |
-| **Legacy DESIGN.md vs code** | Older doc listed Nunito scale in px and incomplete spacing tokens | Prefer this file; remove or redirect old short DESIGN.md if duplicate |
-| **Dark scrap accents** | `.dark` recolors charts/semantic tokens but not `--accent-pink` etc. | Define dark scrap accents if dark mode ships to users |
-| **Hover tokens in dark** | `--primary-hover` / `--destructive-hover` only in `:root` | Define dark hover companions or rely solely on `/opacity` hovers |
-| **Radius scatter** | Mix of `1.15rem`, `1.25rem`, `1.5rem`, `1.75rem`, `2rem`, Tailwind `rounded-2xl/3xl/4xl` | Consolidate to tokenized radii (card=1.75rem, panel=1.25rem, shell=2rem, control=pill) |
-| **Shadow scatter** | Many near-duplicate warm shadows | Promote named utilities (e.g. `.shadow-paper`, `.shadow-lifted`) |
-| **Button weight** | CVA `font-medium` vs app copy `font-extrabold` elsewhere | Acceptable hierarchy; optionally bump primary CTA weight for scrapbook boldness |
-| **Sticky note chrome** | Home mini-notes vs Notes page cards differ slightly (radius, tape size, type size) | Keep intentional density difference or extract shared `StickyNoteCard` |
-| **Label component underused** | Many raw `<span>`/`<label>` styles | Prefer shared label class for consistency |
-| **App.css** | Vite template styles largely unused by product UI | Ignore for product design; safe to delete later |
-| **Coming-soon vs live features** | Gallery/Dates are implemented; coming-soon component may be legacy | Use live page patterns as source of truth |
-| **bg-accent-mint** | Settings status uses `bg-accent-mint/70` while scrap map is `scrap-mint` | Prefer `bg-scrap-mint` for consistency |
-| **Lists category colors** | Extra Tailwind `blue-300`, `amber-300`, `rose-950` borders alongside scrap fills | Map fully to scrap tokens + foreground for fewer raw palette exits |
+| **Font split** | Web mixed Inter / Nunito | Pick one primary font for Flutter and stick to it |
+| **Dark scrap accents** | Dark semantic tokens existed; scrap accents incomplete | Define dark scrap accents if dark mode ships |
+| **Hover tokens in dark** | Some hover tokens light-only | Define dark press companions or opacity presses |
+| **Radius scatter** | Mix of 18–32 values | Consolidate: card 28, panel ~20, shell 32, control pill |
+| **Shadow scatter** | Near-duplicate warm shadows | Named `AppShadows.paper`, `.lifted`, `.hold`, etc. |
+| **Button weight** | medium vs extrabold elsewhere | Acceptable hierarchy; optionally bump primary CTA weight |
+| **Sticky note chrome** | Home mini-notes vs Notes page differ slightly | Keep intentional density difference or extract shared `StickyNoteCard` |
+| **Label underused** | Raw text styles instead of shared label | Prefer `AppLabel` |
+| **Coming-soon vs live features** | Gallery/Dates may be live in product | Use live screen patterns as source of truth |
+| **Lists category colors** | Extra raw palette exits | Map fully to scrap tokens + foreground |
 
 ---
 
-## Quick reference — page map
+## Quick reference — screen map
 
-| Route | Page | Signature UI |
+| Route path | Screen | Signature UI |
 | --- | --- | --- |
 | `/pairing` | Pairing | Nickname → hold circle ritual / recovery form |
 | `/` | Home | Pink greeting, days counter, quick note, summary cards, today notes |
@@ -788,18 +843,18 @@ Documented for alignment later — **not changed in code by this doc**.
 
 ---
 
-## File index (implementation)
+## File index (Flutter target)
 
 | Area | Location |
 | --- | --- |
-| Tokens & global styles | `src/index.css` |
-| UI primitives | `src/components/ui/*` |
-| Product chrome | `src/components/app-shell.tsx`, `scrapbook.tsx`, … |
-| Pages | `src/pages/*` |
-| Note color domain | `src/lib/note-colors.ts` |
+| Tokens & theme | `lib/core/theme/**` |
+| Shared widgets | `lib/shared/widgets/**` |
+| App chrome | `lib/shared/widgets/app_shell.dart`, `scrapbook_card.dart`, … |
+| Features / screens | `lib/features/**` |
+| Note color domain | `lib/features/notes/domain/note_colors.dart` |
 | Product intent | `docs/product-brief.md`, `docs/ui-direction.md` |
-| PWA chrome | `index.html`, `public/manifest.webmanifest`, `public/app-icon.svg` |
+| Platform chrome | Android/iOS launch icons, splash, system UI styles |
 
 ---
 
-*Generated from the OurSpace codebase as the design source of truth. Update this document when the implemented language changes.*
+*Flutter design source of truth for OurSpace. Preserve business requirements from product docs; update this document when the implemented visual language changes.*

@@ -1,14 +1,14 @@
-# API Contract
+# API Contract (Flutter Client)
 
 ## Base request
 
-Semua request dari frontend ke Apps Script memakai `POST` JSON.
+Semua request dari app Flutter ke Apps Script memakai `POST` JSON via Dio.
 
 ```json
 {
   "action": "notes.list",
   "memberId": "member_123",
-  "sessionToken": "session_plaintext_from_local_storage",
+  "sessionToken": "session_plaintext_from_secure_storage",
   "payload": {}
 }
 ```
@@ -47,6 +47,7 @@ Gagal:
 - `FORBIDDEN`: member tidak boleh mengubah item milik member lain.
 - `PAIRING_EXPIRED`: window pairing 30 detik habis.
 - `INTERNAL_ERROR`: error tidak terduga.
+- `NETWORK_OFFLINE`: dinormalisasi di client saat Dio gagal karena offline (bukan selalu dari backend).
 
 ## Pairing
 
@@ -127,7 +128,7 @@ Response data sama seperti `pairing.signal`.
 
 ### `session.resume`
 
-Memvalidasi `memberId` dan `sessionToken` dari `localStorage`.
+Memvalidasi `memberId` dan `sessionToken` dari secure storage.
 
 Payload:
 
@@ -150,6 +151,10 @@ Response data:
   "anniversaryDate": "2026-07-02T08:00:12.000Z"
 }
 ```
+
+### `session.recover`
+
+Recovery session (jika diimplementasikan di product) mengganti `sessionToken` untuk identity member tersebut. Multi-device approval penuh bisa ditambahkan nanti.
 
 ## Home
 
@@ -177,7 +182,9 @@ Response data:
 }
 ```
 
-Jika `today.stickyNotes` kosong, frontend menyembunyikan section terbaru hari ini.
+Jika `today.stickyNotes` kosong, Flutter menyembunyikan section terbaru hari ini.
+
+Catatan: deployment backend yang lebih baru dapat menyertakan Home summary di `home.get` agar Home cukup satu request. Client boleh menyimpan compatibility fallback untuk deployment lama.
 
 ## Sticky Notes
 
@@ -298,12 +305,33 @@ Rules:
 - `caption` dan `takenAt` wajib.
 - Backend menyimpan original ke private Drive.
 - API list/detail mengembalikan thumbnail/base64 kecil untuk preview private, bukan public URL.
+- Di Flutter, decode thumbnail via `Image.memory` / cached image helper; jangan persist base64 gallery ke disk storage.
+
+## Shared Lists fase lanjut
+
+Actions (sesuai product lanjutan):
+
+- `sharedLists.list`
+- `sharedLists.create`
+- `sharedLists.update`
+- `sharedLists.delete`
+
+## Health / diagnostics (Settings)
+
+Actions yang dipakai Settings checks (jika backend menyediakan):
+
+- `health.check`
+- `couple.status`
+- `gallery.health`
+- `backup.health`
+- `backups.list`
+- backup run (manual dari Settings / backend)
 
 ## Settings
 
 ### `settings.resetPairing`
 
-Dipakai dari settings dengan konfirmasi kuat.
+Dipakai dari settings dengan konfirmasi kuat (`ConfirmAlertDialog`).
 
 ```json
 {
@@ -312,3 +340,13 @@ Dipakai dari settings dengan konfirmasi kuat.
 ```
 
 Mode awal yang disarankan: `keep_data`. Mode hapus data bisa ditambahkan belakangan jika benar-benar dibutuhkan.
+
+## Client mapping notes (Flutter)
+
+| Layer | Mapping |
+| --- | --- |
+| HTTP | Dio POST JSON only |
+| Models | Freezed/json_serializable or hand-written Dart models matching this contract |
+| Session fields | Secure storage keys for `memberId`, `sessionToken` |
+| Errors | Map `error.code` → UI messages Indonesia santai |
+| Auth injection | Dio interceptor attaches `memberId` + `sessionToken` after pairing |

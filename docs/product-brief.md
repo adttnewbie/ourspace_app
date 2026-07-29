@@ -18,7 +18,7 @@ Membuat ruang digital private untuk dua orang yang terasa personal sejak pertama
 ## Nilai utama
 
 - Satu tempat untuk menyimpan momen dan rencana.
-- Cepat dibuka dari HP.
+- Cepat dibuka dari HP (Flutter native cold/warm start).
 - Terasa seperti scrapbook lucu, bukan app produktivitas kantor.
 - Tetap private walaupun backend memakai Google Apps Script.
 
@@ -30,7 +30,7 @@ Membuat ruang digital private untuk dua orang yang terasa personal sejak pertama
 - Keduanya menahan tombol lingkaran selama 3 detik.
 - Pairing dianggap sukses jika dua sinyal masuk dalam window 30 detik.
 - Timestamp sukses dari backend menjadi `anniversaryDate`.
-- Setelah pairing, device yang sama langsung masuk home pada kunjungan berikutnya.
+- Setelah pairing, device yang sama langsung masuk home pada buka app berikutnya (session di secure storage).
 
 ### Home
 

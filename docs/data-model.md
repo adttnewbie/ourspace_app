@@ -12,6 +12,8 @@ Semua sheet data user memakai kolom dasar:
 
 Soft delete lebih aman untuk app personal karena data kenangan sulit diganti.
 
+Di Flutter, model domain mirror struktur ini (nullable `deletedAt`, ISO strings diparse ke `DateTime` di layer client jika perlu).
+
 ## Sheet: `members`
 
 Menyimpan dua device utama yang berhasil pairing.
@@ -69,7 +71,7 @@ Setting v1:
 | --- | --- | --- |
 | id | string | UUID |
 | body | string | Isi sticky note pendek |
-| color | string | Key warna pastel, contoh `pink`, `mint`, `yellow`, `blue` |
+| color | string | Key warna pastel, contoh `pink`, `mint`, `yellow`, `blue`, `lavender` |
 | createdBy | string | `memberId` pembuat |
 | createdAt | string | ISO timestamp |
 | updatedAt | string | ISO timestamp |
@@ -80,6 +82,7 @@ Aturan:
 - Tidak perlu title pada v1.
 - Edit/hapus hanya boleh dilakukan oleh `createdBy`.
 - Notes diurutkan dari `createdAt` terbaru.
+- Flutter map `color` → `ScrapTone` / `AppColors.scrap*`.
 
 ## Sheet fase lanjut: `date_plans`
 
@@ -115,9 +118,10 @@ Aturan:
 
 Aturan:
 
-- V1 gallery hanya foto, bukan video.
+- Gallery hanya foto, bukan video.
 - File Drive tetap private.
 - Preview app memakai thumbnail dari API, bukan public link.
+- Flutter: `thumbnailData` memory-only cache; jangan persist ke secure/shared storage.
 
 ## Sheet fase lanjut: `shared_lists`
 
@@ -155,3 +159,20 @@ OurSpace/
 ```
 
 Simpan ID folder di Apps Script Properties dan mirror non-secret di `couple_settings` jika perlu.
+
+## Flutter domain mapping
+
+Paths aligned with [coding-standard.md](./coding-standard.md) / [architecture.md](./architecture.md):
+
+| Sheet / entity | Dart model location |
+| --- | --- |
+| members | `lib/features/session/domain/member.dart` |
+| pairing_sessions | `lib/features/pairing/domain/pairing_session.dart` |
+| sticky_notes | `lib/features/notes/domain/sticky_note.dart` |
+| date_plans | `lib/features/dates/domain/date_plan.dart` |
+| gallery | `lib/features/gallery/domain/gallery_item.dart` |
+| shared_lists | `lib/features/lists/domain/shared_list_item.dart` |
+| couple_settings | `lib/features/settings/domain/couple_settings.dart` |
+| home aggregate | `lib/features/home/domain/home_snapshot.dart` |
+
+DTO counterparts live under each feature’s `data/dto/` with `*Dto` suffix.

@@ -1,38 +1,43 @@
-# API Proxy
+# API access (Flutter network)
 
-Browser calls directly to Google Apps Script Web Apps are not stable for OurSpace because Apps Script does not return the CORS headers the frontend needs. A browser may show `200 OK`, but JavaScript still cannot read the JSON response.
+## Historical web note
 
-The stable path is:
+Pada web, browser call langsung ke Google Apps Script sering gagal dibaca JS karena CORS. Solusi web memakai same-origin proxy. **OurSpace target adalah Flutter mobile**, yang tidak tunduk pada CORS browser.
+
+## Flutter default path
 
 ```text
-React app
-  -> /api/apps-script
-Vercel Function or Vite dev proxy
-  -> APPS_SCRIPT_URL
-Google Apps Script Web App
+Flutter app (Dio)
+  -> POST JSON to API_BASE_URL
+Google Apps Script Web App (/exec)
+  -> SpreadsheetApp / DriveApp
 ```
 
-## Env
+`API_BASE_URL` biasanya di-set ke URL `/exec`. Lihat [environment.md](./environment.md).
 
-Use `.env` locally and Vercel Environment Variables in production:
+## Optional proxy
+
+Proxy tetap relevan jika:
+
+- Target Flutter **web** di masa depan (CORS).
+- Tim ingin menyembunyikan `/exec` di belakang backend sendiri.
+- Perlu rate-limit / edge logging.
+
+Jika proxy dipakai:
+
+```text
+Flutter (Dio) -> API_BASE_URL (proxy)
+Proxy server  -> APPS_SCRIPT_URL (/exec)   # server env only
+```
+
+## Konfigurasi client
 
 ```bash
-VITE_API_URL="/api/apps-script"
-APPS_SCRIPT_URL="https://script.google.com/macros/s/xxx/exec"
+flutter run --dart-define=API_BASE_URL=https://script.google.com/macros/s/xxx/exec
 ```
 
-`VITE_API_URL` is safe for the browser. `APPS_SCRIPT_URL` must stay server-side.
-
-## Local dev
-
-Use `vercel dev` when testing the real Vercel Function path. `bun dev` alone does not run Vercel Functions; this project has a Vite dev middleware fallback so `/api/apps-script` still works locally.
-
-The frontend still calls `/api/apps-script`, so pairing and Settings use the same API path locally and in production.
-
-## Production
-
-On Vercel, `api/apps-script.ts` accepts POST requests, forwards the raw text body to `APPS_SCRIPT_URL`, follows redirects, and returns JSON to the frontend.
+Jangan commit URL production jika kebijakan melarang; track placeholder saja.
 
 ## Manual test
 
-Use Settings -> `Cek koneksi`. It sends `health.check` through `/api/apps-script`.
+Settings → `Cek koneksi` → `health.check` lewat ApiClient yang sama dengan pairing.

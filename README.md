@@ -1,17 +1,47 @@
-# ourspace_app
+# OurSpace (Flutter)
 
-A new Flutter project.
+Private digital scrapbook for exactly two people.  
+Flutter client → Google Apps Script → Spreadsheet (+ Drive later).
 
-## Getting Started
+## Documentation (SSOT)
 
-This project is a starting point for a Flutter application.
+**Start here for implementation:**
 
-A few resources to get you started if this is your first Flutter project:
+1. [docs/implementation-order.md](./docs/implementation-order.md)  
+2. [docs/architecture.md](./docs/architecture.md)  
+3. [docs/coding-standard.md](./docs/coding-standard.md)  
+4. [design.md](./design.md)  
+5. [docs/README.md](./docs/README.md) — full index  
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Critical contracts:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [docs/api-contract.md](./docs/api-contract.md)  
+- [docs/pairing-flow.md](./docs/pairing-flow.md)  
+- [docs/routing.md](./docs/routing.md)  
+- [docs/state-management.md](./docs/state-management.md)  
+- [docs/screen-specs/](./docs/screen-specs/)  
+
+## Stack
+
+| Layer | Choice |
+| --- | --- |
+| App | Flutter (Android + iOS) |
+| State | Riverpod |
+| Routes | go_router |
+| HTTP | Dio → `API_BASE_URL` |
+| Session | flutter_secure_storage |
+| Backend | Google Apps Script Web App |
+| Data | Google Spreadsheet (+ Drive) |
+
+## V1 scope
+
+Pairing hold ritual · Home · Sticky Notes · Settings session tools  
+
+## Run
+
+```bash
+flutter pub get
+flutter run --dart-define=API_BASE_URL=https://script.google.com/macros/s/YOUR_ID/exec
+```
+
+See [docs/environment.md](./docs/environment.md). Never commit real secrets or session tokens.
