@@ -6,7 +6,7 @@ import '../../features/home/presentation/home_screen.dart';
 import '../../features/notes/presentation/notes_screen.dart';
 import '../../features/pairing/presentation/pairing_screen.dart';
 import '../../features/session/presentation/session_gate_screen.dart';
-import '../../features/settings/presentation/settings_placeholder_screen.dart';
+import '../../features/settings/presentation/settings_screen.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../../shared/widgets/route_placeholder_screen.dart';
 import 'app_routes.dart';
@@ -146,7 +146,7 @@ GoRouter createAppRouter({
               GoRoute(
                 path: AppRoutes.settings,
                 name: 'settings',
-                builder: (context, state) => const SettingsPlaceholderScreen(),
+                builder: (context, state) => const SettingsScreen(),
               ),
             ],
           ),
