@@ -27,13 +27,38 @@ StickyNote _note({
   );
 }
 
+class _FakeHomeRepo implements HomeRepository {
+  int getCalls = 0;
+
+  @override
+  Future<HomeSnapshot> get({bool force = false}) async {
+    getCalls++;
+    return HomeSnapshot(
+      greeting: 'Hai',
+      anniversaryDate: DateTime.utc(2026, 7, 2),
+      daysTogether: 1,
+      todayStickyNotes: const [],
+      stickyNotesCount: 0,
+      fetchedAt: DateTime.now(),
+    );
+  }
+
+  @override
+  Future<HomeSnapshot> fetchFresh() => get(force: true);
+
+  @override
+  Future<HomeSnapshot?> readCache() async => null;
+
+  @override
+  Future<void> clearCache() async {}
+}
+
 class _FakeNotesRepo implements NotesRepository {
   List<StickyNote> items = [_note()];
   int listCalls = 0;
   int createCalls = 0;
   int updateCalls = 0;
   int deleteCalls = 0;
-  int homeInvalidateWatch = 0;
   Object? createError;
   Object? deleteError;
 
@@ -101,32 +126,6 @@ class _FakeNotesRepo implements NotesRepository {
   Future<void> clearCache() async {}
 }
 
-class _FakeHomeRepo implements HomeRepository {
-  int getCalls = 0;
-
-  @override
-  Future<HomeSnapshot> get({bool force = false}) async {
-    getCalls++;
-    return HomeSnapshot(
-      greeting: 'Hai',
-      anniversaryDate: DateTime.utc(2026, 7, 2),
-      daysTogether: 1,
-      todayStickyNotes: const [],
-      stickyNotesCount: 0,
-      fetchedAt: DateTime.now(),
-    );
-  }
-
-  @override
-  Future<HomeSnapshot> fetchFresh() => get(force: true);
-
-  @override
-  Future<HomeSnapshot?> readCache() async => null;
-
-  @override
-  Future<void> clearCache() async {}
-}
-
 void main() {
   group('NotesListNotifier (step 2.4)', () {
     late _FakeNotesRepo notesRepo;
@@ -164,7 +163,6 @@ void main() {
       final state = container.read(notesListProvider).asData!.value;
       expect(state.items.first.id, 'note_new');
       expect(notesRepo.createCalls, 1);
-      // invalidate home → rebuild may call get again when watched
       await container.read(homeProvider.future);
       expect(homeRepo.getCalls, greaterThan(homeBefore));
     });
