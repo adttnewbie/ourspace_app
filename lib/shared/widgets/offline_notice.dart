@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
@@ -37,7 +36,7 @@ class OfflineNotice extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(LucideIcons.cloudOff, size: 18, color: AppColors.foreground),
+            Icon(Icons.cloud_off_outlined, size: 18, color: AppColors.foreground),
             const SizedBox(width: AppSpacing.x2),
             Expanded(
               child: Text(

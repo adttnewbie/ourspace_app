@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -64,7 +63,7 @@ class StickyNoteCard extends StatelessWidget {
                 ),
                 if (note.canEdit) ...[
                   AppButton(
-                    icon: const Icon(LucideIcons.pencil, size: 16),
+                    icon: const Icon(Icons.edit_outlined, size: 16),
                     semanticLabel: _editA11y,
                     onPressed: onEdit,
                     size: AppButtonSize.iconSm,
@@ -72,7 +71,7 @@ class StickyNoteCard extends StatelessWidget {
                   ),
                   const SizedBox(width: AppSpacing.x1),
                   AppButton(
-                    icon: const Icon(LucideIcons.trash2, size: 16),
+                    icon: const Icon(Icons.delete_outline, size: 16),
                     semanticLabel: _deleteA11y,
                     onPressed: onDelete,
                     size: AppButtonSize.iconSm,

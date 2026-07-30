@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../core/connectivity/connectivity_providers.dart';
 import '../../../core/error/app_failure.dart';
@@ -215,7 +214,7 @@ class _NotesScaffold extends StatelessWidget {
                   title: NotesScreen._title,
                   eyebrow: NotesScreen._eyebrow,
                   action: AppButton(
-                    icon: const Icon(LucideIcons.plus, size: 20),
+                    icon: const Icon(Icons.add, size: 20),
                     semanticLabel: 'Tambah note',
                     onPressed: onCreate,
                     size: AppButtonSize.icon,

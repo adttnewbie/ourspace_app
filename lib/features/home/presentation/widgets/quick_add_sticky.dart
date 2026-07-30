@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/connectivity/connectivity_providers.dart';
 import '../../../../core/error/app_failure.dart';
@@ -111,7 +110,7 @@ class _QuickAddStickyState extends ConsumerState<QuickAddSticky> {
           Align(
             alignment: Alignment.centerRight,
             child: AppButton(
-              icon: const Icon(LucideIcons.send, size: 18),
+              icon: const Icon(Icons.send_outlined, size: 18),
               semanticLabel: _submitA11y,
               onPressed: canSubmit ? _submit : null,
               isLoading: _submitting,
