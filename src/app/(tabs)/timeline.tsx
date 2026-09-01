@@ -12,6 +12,7 @@ import {
     X,
 } from "lucide-react-native";
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
     Modal,
     Pressable,
@@ -96,6 +97,7 @@ const STATUS = {
 };
 
 export default function DateTab() {
+  const insets = useSafeAreaInsets();
   const [dates, setDates] = useState<DatePlan[]>(INITIAL);
   const [showAdd, setShowAdd] = useState(false);
   const [title, setTitle] = useState("");
@@ -150,12 +152,13 @@ export default function DateTab() {
       </View>
 
       <ScrollView
+        removeClippedSubviews
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         bounces={false}
         overScrollMode="never"
-        contentContainerClassName="px-6 pt-14 pb-28"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 88, paddingHorizontal: 24 }} contentContainerClassName="grow"
+       
       >
         <View className="w-full max-w-[400px] self-center">
           <View className="flex-row items-center gap-2">

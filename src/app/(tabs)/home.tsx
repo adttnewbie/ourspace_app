@@ -14,6 +14,7 @@ import {
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const C = {
   ink: "#1B1C1A",
@@ -36,8 +37,8 @@ function getDuration() {
 }
 
 export default function HomeTab() {
+  const insets = useSafeAreaInsets();
   const [duration, setDuration] = useState(() => getDuration());
-  // hindari hydration mismatch: hitung ulang setelah mount
   useEffect(() => { setDuration(getDuration()); }, []);
   const { days, years, months, startLabel } = duration;
   const yearLabel =
@@ -54,12 +55,12 @@ export default function HomeTab() {
       </View>
 
       <ScrollView
+        removeClippedSubviews
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         bounces={false}
         overScrollMode="never"
-        contentContainerClassName="px-6 pt-14 pb-28"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 88, paddingHorizontal: 24 }}
       >
         <View className="w-full max-w-[400px] self-center">
           {/* top bar */}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Pressable, Modal, TextInput } from "react-native";
 import { Images, Heart, Search, Plus, X, Camera, PenLine, Check } from "lucide-react-native";
 import { WashiTape } from "@/components/ui/washi-tape";
@@ -21,6 +22,7 @@ const COLORS = [
 ];
 
 export default function MemoriesTab() {
+  const insets = useSafeAreaInsets();
   const [tiles, setTiles] = useState<Tile[]>(INITIAL);
   const [showAdd, setShowAdd] = useState(false);
   const [title, setTitle] = useState("");
@@ -65,7 +67,8 @@ export default function MemoriesTab() {
         <View className="absolute top-[300px] -left-10 w-40 h-40 rounded-full bg-[#EEE199] opacity-12" />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} bounces={false} overScrollMode="never" contentContainerClassName="px-6 pt-14 pb-28" contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView
+        removeClippedSubviews showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} bounces={false} overScrollMode="never" contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 88, paddingHorizontal: 24 }} contentContainerClassName="grow">
         <View className="w-full max-w-[400px] self-center">
           <Text className="text-[11px] font-bold tracking-[1px] text-[#864D61]" style={{ fontFamily: "Space Mono" }}>
             KOLEKSI • {tiles.length} KENANGAN

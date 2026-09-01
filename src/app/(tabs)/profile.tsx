@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import { Link } from "expo-router";
 import { User, Heart, LogOut, Shield, Bell, Palette, Lock, Trash2, ChevronRight, Copy, Check, PenLine } from "lucide-react-native";
@@ -25,6 +26,7 @@ function HandCheckbox({ checked, onPress }: { checked: boolean; onPress: () => v
 }
 
 export default function ProfileTab() {
+  const insets = useSafeAreaInsets();
   const [notifKencan, setNotifKencan] = useState(true);
   const [notifHarian, setNotifHarian] = useState(false);
   const [privateMode, setPrivateMode] = useState(true);
@@ -45,7 +47,8 @@ export default function ProfileTab() {
         <View className="absolute top-[320px] -left-10 w-36 h-36 rounded-full bg-[#EEE199] opacity-12" />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} bounces={false} overScrollMode="never" contentContainerClassName="px-6 pt-14 pb-28" contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView
+        removeClippedSubviews showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} bounces={false} overScrollMode="never" contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 88, paddingHorizontal: 24 }} contentContainerClassName="grow">
         <View className="w-full max-w-[400px] self-center">
           <Text className="text-[11px] font-bold tracking-[1px] text-[#864D61]" style={{ fontFamily: "Space Mono" }}>
             RUANG KITA • PENGATURAN

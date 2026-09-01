@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { ArrowLeft, Lock, Mail, User, Link2, Heart, AlertCircle } from "lucide-react-native";
@@ -22,6 +23,7 @@ const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const codeRx = /^OUR-[A-Z0-9]{4}$/;
 
 export default function RegisterPage() {
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -64,14 +66,15 @@ export default function RegisterPage() {
       </View>
 
       <ScrollView
+        removeClippedSubviews
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         horizontal={false}
         bounces={false}
         overScrollMode="never"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
-        contentContainerClassName="grow px-6 pt-12 pb-6"
+        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16, paddingHorizontal: 24 }}
+        contentContainerClassName="grow"
       >
         <View className="w-full max-w-[400px] self-center flex-1">
           <View className="flex-row items-center justify-between">

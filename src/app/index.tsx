@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Link, useRouter } from "expo-router";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, interpolate } from "react-native-reanimated";
 import { ArrowLeftRight, Sparkles, Heart, Lock } from "lucide-react-native";
@@ -23,24 +24,25 @@ const C = {
 
 
 export default function GetStartedPage() {
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const [swapped, setSwapped] = useState(false);
   const progress = useSharedValue(0);
   const btnScale = useSharedValue(1);
 
-  const toggleSwap = () => {
+  const toggleSwap = useCallback(() => {
     setSwapped((s) => !s);
     progress.value = withSpring(swapped ? 0 : 1, { damping: 14, stiffness: 180 });
     btnScale.value = withSpring(0.92, { damping: 10 }, () => {
       btnScale.value = withSpring(1, { damping: 8, stiffness: 200 });
     });
-  };
+  }, [swapped, progress, btnScale]);
 
   const leftStyle = useAnimatedStyle(() => {
     const t = progress.value;
     return {
       transform: [
-        { translateX: withSpring(interpolate(t, [0, 1], [0, 18]), { damping: 14 }) },
+        { translateX: interpolate(t, [0, 1], [0, 18]) },
         { rotate: `${interpolate(t, [0, 1], [-1.6, 1.6])}deg` },
       ],
       zIndex: interpolate(t, [0, 1], [2, 1]),
@@ -50,7 +52,7 @@ export default function GetStartedPage() {
     const t = progress.value;
     return {
       transform: [
-        { translateX: withSpring(interpolate(t, [0, 1], [0, -18]), { damping: 14 }) },
+        { translateX: interpolate(t, [0, 1], [0, -18]) },
         { rotate: `${interpolate(t, [0, 1], [1.6, -1.6])}deg` },
       ],
       zIndex: interpolate(t, [0, 1], [1, 2]),
@@ -67,7 +69,7 @@ export default function GetStartedPage() {
     ? { name: "Aku", label: "YOU", color: C.pink, soft: C.pinkSoft, Icon: Sparkles }
     : { name: "Kamu", label: "PARTNER", color: C.blue, soft: C.blueSoft, Icon: Heart };
 
-  const handleSwipeComplete = () => router.push("/register");
+  const handleSwipeComplete = useCallback(() => router.push("/register"), [router]);
 
   return (
     <View className="flex-1 bg-[#FDFCF8] overflow-hidden">
@@ -90,8 +92,10 @@ export default function GetStartedPage() {
         horizontal={false}
         bounces={false}
         overScrollMode="never"
-        contentContainerStyle={{ flexGrow: 1 }}
-        contentContainerClassName="grow px-6 pt-12 pb-6"
+        removeClippedSubviews
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16, paddingHorizontal: 24 }}
+        contentContainerClassName="grow"
       >
         <View className="flex-1 w-full max-w-[400px] mx-auto">
           <View className="flex-row items-center justify-between">

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Pressable, Modal, TextInput } from "react-native";
 import { StickyNote, PenLine, Heart, Search, Plus, X, Check } from "lucide-react-native";
 import { WashiTape } from "@/components/ui/washi-tape";
@@ -21,6 +22,7 @@ const COLORS = [
 ];
 
 export default function NotesTab() {
+  const insets = useSafeAreaInsets();
   const [notes, setNotes] = useState<Note[]>(INITIAL);
   const [showAdd, setShowAdd] = useState(false);
   const [title, setTitle] = useState("");
@@ -67,12 +69,13 @@ export default function NotesTab() {
       </View>
 
       <ScrollView
+        removeClippedSubviews
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         bounces={false}
         overScrollMode="never"
-        contentContainerClassName="px-6 pt-14 pb-28"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 88, paddingHorizontal: 24 }} contentContainerClassName="grow"
+       
       >
         <View className="w-full max-w-[400px] self-center">
           <View className="flex-row items-center gap-2">

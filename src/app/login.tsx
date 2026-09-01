@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Link, useRouter } from "expo-router";
 import { ArrowLeft, Lock, Mail, Heart, AlertCircle } from "lucide-react-native";
 import { WashiTape } from "@/components/ui/washi-tape";
@@ -22,6 +23,7 @@ const C = {
 const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function LoginPage() {
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,14 +69,15 @@ export default function LoginPage() {
       </View>
 
       <ScrollView
+        removeClippedSubviews
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         horizontal={false}
         bounces={false}
         overScrollMode="never"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
-        contentContainerClassName="grow px-6 pt-12 pb-6"
+        contentContainerStyle={{ flexGrow: 1, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16, paddingHorizontal: 24 }}
+        contentContainerClassName="grow"
       >
         <View className="w-full max-w-[400px] self-center flex-1">
           <View className="flex-row items-center justify-between">

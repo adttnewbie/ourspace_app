@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { View, Text, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { House, Images, CalendarHeart, User, StickyNote } from "lucide-react-native";
@@ -20,7 +21,7 @@ const TABS: Record<string, { label: string; Icon: any; activeBg: string }> = {
   profile: { label: "Kita", Icon: User, activeBg: "#E8D9E0" },
 };
 
-export function BookmarkBar({ state, descriptors, navigation }: any) {
+export const BookmarkBar = memo(function BookmarkBar({ state, descriptors, navigation }: any) {
   const insets = useSafeAreaInsets();
 
   return (
@@ -53,7 +54,9 @@ export function BookmarkBar({ state, descriptors, navigation }: any) {
 
           const onPress = () => {
             const event = navigation.emit({ type: "tabPress", target: route.key, canPreventDefault: true });
-            if (!isFocused && !event.defaultPrevented) navigation.navigate(route.name);
+            if (!isFocused && !event.defaultPrevented) {
+              requestAnimationFrame(() => navigation.navigate(route.name));
+            }
           };
 
           return (
@@ -94,4 +97,4 @@ export function BookmarkBar({ state, descriptors, navigation }: any) {
       <View style={{ height: 2 }} />
     </View>
   );
-}
+});
