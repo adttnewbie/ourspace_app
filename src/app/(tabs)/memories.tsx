@@ -81,7 +81,7 @@ export default function MemoriesTab() {
           </Text>
 
           <View className="mt-4 flex-row items-center gap-2">
-            <View className="flex-1 flex-row items-center gap-2 bg-white border border-[#1B1C1A] rounded-full px-3 py-2" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
+            <View className="flex-1 flex-row items-center gap-2 bg-white border border-[#1B1C1A] rounded-full px-3 py-2" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
               <Search size={14} color="#837377" />
               <TextInput
                 value={q}
@@ -97,7 +97,7 @@ export default function MemoriesTab() {
                 </Pressable>
               )}
             </View>
-            <Pressable onPress={() => { setErrors({}); setShowAdd(true); }} className="w-[42px] h-[42px] rounded-full bg-[#864D61] border border-[#1B1C1A] items-center justify-center active:opacity-80" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
+            <Pressable onPress={() => { setErrors({}); setShowAdd(true); }} className="w-[42px] h-[42px] rounded-full bg-[#864D61] border border-[#1B1C1A] items-center justify-center active:opacity-80" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
               <Plus size={18} color="#fff" strokeWidth={2.2} />
             </Pressable>
           </View>
@@ -117,7 +117,7 @@ export default function MemoriesTab() {
           ) : (
             <View className="mt-6 gap-4">
               {filtered.map((t) => (
-                <View key={t.id} className="bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-3 overflow-visible" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 4, height: 4 }, transform: [{ rotate: t.rot }], overflow: "visible" as any }}>
+                <View key={t.id} className="bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-3 overflow-visible" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 4, height: 4 }, transform: [{ rotate: t.rot }], overflow: "visible" as any }}>
                   <View className="absolute -top-2 left-5 z-10">
                     <WashiTape w={42} rotate="-3deg" color={t.color} />
                   </View>
@@ -163,7 +163,7 @@ export default function MemoriesTab() {
       <Modal visible={showAdd} animationType="slide" transparent onRequestClose={() => { setErrors({}); setShowAdd(false); }} statusBarTranslucent>
         <View className="flex-1 bg-[#1B1C1A]/40 justify-end">
           <Pressable className="flex-1" onPress={() => setShowAdd(false)} />
-          <View className="bg-[#FDFCF8] rounded-t-[20px] border-t-[1.5px] border-x-[1.5px] border-[#1B1C1A] px-6 pt-5 pb-6 max-h-[88%]" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 0, height: -4 } }}>
+          <View className="bg-[#FDFCF8] rounded-t-[20px] border-t-[1.5px] border-x-[1.5px] border-[#1B1C1A] px-6 pt-5 pb-6 max-h-[88%]" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 0, height: -4 } }}>
             <View className="absolute -top-2 left-1/2 -translate-x-1/2 z-10">
               <WashiTape w={56} rotate="-2deg" color={color} />
             </View>
@@ -310,7 +310,7 @@ export default function MemoriesTab() {
                 </View>
               </View>
 
-              <Pressable onPress={handleSave} className="mt-1 bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3.5 flex-row items-center justify-center gap-2 active:opacity-90" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
+              <Pressable onPress={handleSave} className="mt-1 bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3.5 flex-row items-center justify-center gap-2 active:opacity-90" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
                 <Text className="text-[15px] font-extrabold text-white" style={{ fontFamily: "Bricolage Grotesque" }}>
                   Tempel ke jurnal
                 </Text>

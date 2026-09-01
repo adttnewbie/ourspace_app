@@ -57,8 +57,8 @@ export default function RegisterPage() {
   return (
     <View className="flex-1 bg-[#FDFCF8] overflow-hidden">
       <View pointerEvents="none" className="absolute inset-0 overflow-hidden">
-        <View className="absolute -top-20 -right-16 w-[260px] h-[260px] rounded-full bg-[#FFD9E3] opacity-[0.24]" />
-        <View className="absolute top-[320px] -left-16 w-[200px] h-[200px] rounded-full bg-[#B4EBFF] opacity-[0.18]" />
+        <View className="absolute -top-20 -right-16 w-[260px] h-[260px] rounded-full bg-[#FFD9E3] opacity-[0.12]" />
+        <View className="absolute top-[320px] -left-16 w-[200px] h-[200px] rounded-full bg-[#B4EBFF] opacity-[0.08]" />
         <View className="absolute bottom-16 right-8 w-28 h-28 rounded-full bg-[#EEE199] opacity-[0.16]" />
         <Text numberOfLines={1} className="absolute left-0 right-0 text-center text-[180px] font-extrabold text-[#1B1C1A] opacity-[0.025] top-[48%] -translate-y-1/2" style={{ fontFamily: "Bricolage Grotesque" }}>
           03
@@ -79,7 +79,7 @@ export default function RegisterPage() {
         <View className="w-full max-w-[400px] self-center flex-1">
           <View className="flex-row items-center justify-between">
             <Link href="/" asChild>
-              <Pressable className="w-9 h-9 rounded-full bg-white border border-[#1B1C1A] items-center justify-center active:opacity-80" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
+              <Pressable className="w-9 h-9 rounded-full bg-white border border-[#1B1C1A] items-center justify-center active:opacity-80" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
                 <ArrowLeft size={16} color={C.ink} strokeWidth={2.2} />
               </Pressable>
             </Link>
@@ -111,7 +111,7 @@ export default function RegisterPage() {
           </View>
 
           {hasError && (
-            <View className="mt-4 flex-row items-start gap-2.5 rounded-[12px] border-[1.4px] border-[#ba1a1a] px-3.5 py-3" style={{ backgroundColor: C.errorContainer, shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
+            <View className="mt-4 flex-row items-start gap-2.5 rounded-[12px] border-[1.4px] border-[#ba1a1a] px-3.5 py-3" style={{ backgroundColor: C.errorContainer, shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
               <View className="w-7 h-7 rounded-full bg-[#ba1a1a] items-center justify-center mt-0.5">
                 <AlertCircle size={14} color="#fff" strokeWidth={2.2} />
               </View>
@@ -126,7 +126,7 @@ export default function RegisterPage() {
             </View>
           )}
 
-          <View className="mt-5 bg-white rounded-[20px] border-[1.5px] p-5 pt-6" style={{ borderColor: hasError ? C.error : C.ink, shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 4, height: 4 } }}>
+          <View className="mt-5 bg-white rounded-[20px] border-[1.5px] p-5 pt-6" style={{ borderColor: hasError ? C.error : C.ink, shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 4, height: 4 } }}>
             <View className="absolute -top-2 left-7 z-10">
               <WashiTape w={56} rotate="-3deg" color={hasError ? C.errorContainer : C.yellow} />
             </View>

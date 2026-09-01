@@ -74,9 +74,9 @@ export default function GetStartedPage() {
   return (
     <View className="flex-1 bg-[#FDFCF8] overflow-hidden">
       <View pointerEvents="none" className="absolute inset-0 overflow-hidden">
-        <View className="absolute -top-20 -right-16 w-[240px] h-[240px] rounded-full bg-[#FFD9E3] opacity-[0.28]" />
-        <View className="absolute top-[260px] -left-16 w-[200px] h-[200px] rounded-full bg-[#B4EBFF] opacity-[0.22]" />
-        <View className="absolute bottom-24 right-6 w-32 h-32 rounded-full bg-[#EEE199] opacity-[0.18]" />
+        <View className="absolute -top-20 -right-16 w-[240px] h-[240px] rounded-full bg-[#FFD9E3] opacity-[0.12]" />
+        <View className="absolute top-[260px] -left-16 w-[200px] h-[200px] rounded-full bg-[#B4EBFF] opacity-[0.10]" />
+        <View className="absolute bottom-24 right-6 w-32 h-32 rounded-full bg-[#EEE199] opacity-[0.08]" />
         <Text
           numberOfLines={1}
           className="absolute left-0 right-0 text-center text-[180px] font-extrabold text-[#1B1C1A] opacity-[0.025] top-[52%] -translate-y-1/2"
@@ -135,7 +135,7 @@ export default function GetStartedPage() {
 
           <View
             className="mt-6 bg-white rounded-[20px] border-[1.5px] border-[#1B1C1A] p-3.5 overflow-visible"
-            style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 4, height: 4 }, overflow: "visible" as any }}
+            style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 4, height: 4 }, overflow: "visible" as any }}
           >
             <View className="absolute -top-2 left-7 z-10">
               <WashiTape w={52} rotate="-3deg" color={C.yellow} />
@@ -145,7 +145,7 @@ export default function GetStartedPage() {
               <Animated.View className="flex-1 h-[154px]" style={leftStyle}>
                 <View
                   className="flex-1 bg-white rounded-2xl border-[1.5px] border-[#1B1C1A] p-2.5 overflow-visible"
-                  style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, overflow: "visible" as any }}
+                  style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, overflow: "visible" as any }}
                 >
                   <View className="absolute -top-1.5 left-4 z-10">
                     <WashiTape w={40} rotate={swapped ? "3deg" : "-4deg"} color={left.color} />
@@ -177,7 +177,7 @@ export default function GetStartedPage() {
               <Animated.View className="flex-1 h-[154px]" style={rightStyle}>
                 <View
                   className="flex-1 bg-white rounded-2xl border-[1.5px] border-[#1B1C1A] p-2.5 overflow-visible"
-                  style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, overflow: "visible" as any }}
+                  style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, overflow: "visible" as any }}
                 >
                   <View className="absolute -top-1.5 right-4 z-10">
                     <WashiTape w={40} rotate={swapped ? "-4deg" : "3deg"} color={right.color} />

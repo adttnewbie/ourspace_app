@@ -43,7 +43,7 @@ export function TactileTimeField({ value, onChange, error }: { value: string; on
       <Modal visible={open} transparent animationType="slide" onRequestClose={()=>setOpen(false)} statusBarTranslucent>
         <View className="flex-1 bg-[#1B1C1A]/40 justify-end">
           <Pressable className="flex-1" onPress={()=>setOpen(false)} />
-          <View className="bg-[#FDFCF8] rounded-t-[20px] border-t-[1.5px] border-x-[1.5px] border-[#1B1C1A] px-5 pt-5 pb-6" style={{ shadowColor:C.ink, shadowOpacity:1, shadowRadius:0, shadowOffset:{width:0,height:-4} }}>
+          <View className="bg-[#FDFCF8] rounded-t-[20px] border-t-[1.5px] border-x-[1.5px] border-[#1B1C1A] px-5 pt-5 pb-6" style={{ shadowColor:C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius:0, shadowOffset:{width:0,height:-4} }}>
             <View className="absolute -top-2 left-1/2 -translate-x-1/2 z-10"><WashiTape w={52} rotate="2deg" color={C.blue} /></View>
             <View className="w-10 h-1.5 rounded-full bg-[#1B1C1A] opacity-20 self-center mb-4" />
             <View className="flex-row items-center justify-between">
@@ -51,7 +51,7 @@ export function TactileTimeField({ value, onChange, error }: { value: string; on
               <Pressable onPress={()=>setOpen(false)} className="w-8 h-8 rounded-full bg-white border border-[#1B1C1A] items-center justify-center" accessibilityLabel="Tutup"><X size={16} color={C.ink} /></Pressable>
             </View>
 
-            <View className="mt-4 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-3 flex-row items-center justify-center gap-3" style={{ shadowColor:C.ink, shadowOpacity:1, shadowRadius:0, shadowOffset:{width:3,height:3} }}>
+            <View className="mt-4 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-3 flex-row items-center justify-center gap-3" style={{ shadowColor:C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius:0, shadowOffset:{width:3,height:3} }}>
               <View className="w-14 h-14 rounded-full border-[1.6px] border-[#1B1C1A] items-center justify-center bg-[#FFD9E3]" style={{ transform:[{rotate:"-2deg"}] }}>
                 <Text className="text-[20px] font-extrabold text-[#1B1C1A]" style={{ fontFamily:"Space Mono" }}>{String(h).padStart(2,"0")}</Text>
               </View>
@@ -87,7 +87,7 @@ export function TactileTimeField({ value, onChange, error }: { value: string; on
               </View>
             </View>
 
-            <Pressable onPress={confirm} className="mt-4 bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3 flex-row items-center justify-center gap-2 active:opacity-90" style={{ shadowColor:C.ink, shadowOpacity:1, shadowRadius:0, shadowOffset:{width:3,height:3} }}>
+            <Pressable onPress={confirm} className="mt-4 bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3 flex-row items-center justify-center gap-2 active:opacity-90" style={{ shadowColor:C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius:0, shadowOffset:{width:3,height:3} }}>
               <Text className="text-[14px] font-extrabold text-white" style={{ fontFamily:"Bricolage Grotesque" }}>Pakai jam {String(h).padStart(2,"0")}:{String(m).padStart(2,"0")}</Text>
               <View className="w-6 h-6 rounded-full bg-white items-center justify-center"><Clock3 size={12} color={C.ink} /></View>
             </Pressable>

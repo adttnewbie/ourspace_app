@@ -31,7 +31,7 @@ export const BookmarkBar = memo(function BookmarkBar({ state, descriptors, navig
         className="w-[96%] max-w-[420px] h-[68px] rounded-full bg-white border-[1.6px] border-[#1B1C1A] flex-row items-center px-1.5"
         style={{
           shadowColor: C.ink,
-          shadowOpacity: 1,
+          shadowOpacity: 0.14, elevation: 3,
           shadowRadius: 0,
           shadowOffset: { width: 4, height: 4 },
           transform: [{ rotate: "-0.2deg" }],

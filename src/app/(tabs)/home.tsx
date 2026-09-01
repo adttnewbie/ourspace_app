@@ -86,7 +86,7 @@ export default function HomeTab() {
               className="w-9 h-9 rounded-full bg-white border border-[#1B1C1A] items-center justify-center"
               style={{
                 shadowColor: C.ink,
-                shadowOpacity: 1,
+                shadowOpacity: 0.14, elevation: 3,
                 shadowRadius: 0,
                 shadowOffset: { width: 2, height: 2 },
               }}
@@ -124,7 +124,7 @@ export default function HomeTab() {
             className="mt-5 bg-white rounded-[20px] border-[1.5px] border-[#1B1C1A] p-4 pt-5 overflow-visible"
             style={{
               shadowColor: C.ink,
-              shadowOpacity: 1,
+              shadowOpacity: 0.14, elevation: 3,
               shadowRadius: 0,
               shadowOffset: { width: 4, height: 4 },
               transform: [{ rotate: "-0.3deg" }],
@@ -364,7 +364,7 @@ export default function HomeTab() {
               {/* tile 1 - pink */}
               <View
                 className="flex-1 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-2.5 overflow-visible"
-                style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "-0.8deg" }], overflow: "visible" as any }}
+                style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "-0.8deg" }], overflow: "visible" as any }}
               >
                 <View className="absolute -top-1.5 left-3 z-10">
                   <WashiTape w={36} rotate="-4deg" color={C.pink} />
@@ -386,7 +386,7 @@ export default function HomeTab() {
               {/* tile 2 - yellow, overlap via negative margin */}
               <View
                 className="flex-1 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-2.5 overflow-visible"
-                style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "0.7deg" }], marginTop: 8, overflow: "visible" as any }}
+                style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "0.7deg" }], marginTop: 8, overflow: "visible" as any }}
               >
                 <View className="absolute -top-1.5 right-3 z-10">
                   <WashiTape w={36} rotate="3deg" color={C.yellow} />
@@ -426,7 +426,7 @@ export default function HomeTab() {
               </Link>
             </View>
             <Link href="/(tabs)/notes" asChild>
-              <Pressable className="mt-2.5 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-3 flex-row gap-3" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "0.4deg" }] }}>
+              <Pressable className="mt-2.5 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-3 flex-row gap-3" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "0.4deg" }] }}>
                 <View className="w-10 h-10 rounded-[10px] bg-[#C6F0D1] border border-[#1B1C1A] items-center justify-center mt-0.5">
                   <StickyNote size={18} color={C.ink} strokeWidth={1.8} />
                 </View>
@@ -449,7 +449,7 @@ export default function HomeTab() {
           </View>
 
           {/* ritual kecil - pencil progress (design.md progress = colored pencil) */}
-          <View className="mt-5 bg-white rounded-[14px] border-[1.4px] border-[#1B1C1A] p-3.5 flex-row items-center gap-3" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "0.3deg" }] }}>
+          <View className="mt-5 bg-white rounded-[14px] border-[1.4px] border-[#1B1C1A] p-3.5 flex-row items-center gap-3" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "0.3deg" }] }}>
             <View className="w-9 h-9 rounded-[10px] bg-[#B4EBFF] border border-[#1B1C1A] items-center justify-center">
               <Sparkles size={16} color={C.ink} strokeWidth={1.8} />
             </View>

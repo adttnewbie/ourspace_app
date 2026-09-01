@@ -58,7 +58,7 @@ export default function ProfileTab() {
           </Text>
 
           {/* profil couple - paper card signature */}
-          <View className="mt-4 bg-white rounded-[20px] border-[1.5px] border-[#1B1C1A] p-4" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 4, height: 4 }, transform: [{ rotate: "-0.3deg" }] }}>
+          <View className="mt-4 bg-white rounded-[20px] border-[1.5px] border-[#1B1C1A] p-4" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 4, height: 4 }, transform: [{ rotate: "-0.3deg" }] }}>
             <View className="absolute -top-2 left-6 z-10">
               <WashiTape w={48} rotate="-3deg" color={C.yellow} />
             </View>
@@ -136,7 +136,7 @@ export default function ProfileTab() {
               <View className="flex-1 h-[1px] bg-[#D5C2C6] opacity-30" />
             </View>
 
-            <View className="mt-3 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] overflow-hidden" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
+            <View className="mt-3 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] overflow-hidden" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
               <View className="flex-row items-center justify-between p-4 border-b border-black/5">
                 <View className="flex-row items-center gap-3 flex-1">
                   <View className="w-9 h-9 rounded-[10px] bg-[#FFD9E3] border border-[#1B1C1A] items-center justify-center">
@@ -173,7 +173,7 @@ export default function ProfileTab() {
             </View>
 
             {/* tema kertas - Dymo chips + paper preview */}
-            <View className="mt-4 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-4" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "0.2deg" }] }}>
+            <View className="mt-4 bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-4" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, transform: [{ rotate: "0.2deg" }] }}>
               <View className="absolute -top-1.5 right-4 z-10">
                 <WashiTape w={40} rotate="3deg" color={C.blue} />
               </View>
@@ -237,7 +237,7 @@ export default function ProfileTab() {
                 </View>
               </View>
 
-              <Pressable className="bg-white rounded-[14px] border-[1.4px] border-[#1B1C1A] p-4 flex-row items-center gap-3 active:opacity-90" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
+              <Pressable className="bg-white rounded-[14px] border-[1.4px] border-[#1B1C1A] p-4 flex-row items-center gap-3 active:opacity-90" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
                 <View className="w-9 h-9 rounded-full bg-[#FDFCF8] border border-[#1B1C1A] items-center justify-center">
                   <Shield size={16} color={C.ink} strokeWidth={1.8} />
                 </View>

@@ -57,7 +57,7 @@ export function SwipeButton({ label, onComplete, hint = "GESER UNTUK MEMULAI" }:
           widthSV.value = w;
         }}
         className="w-full h-[58px] rounded-full border-[1.6px] border-[#1B1C1A] bg-[#864D61] overflow-hidden"
-        style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 4, height: 4 } }}
+        style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 4, height: 4 } }}
       >
         <Animated.View className="absolute left-0 top-0 bottom-0 bg-white rounded-full" style={fillStyle} />
         <Animated.View className="absolute inset-0 items-center justify-center flex-row gap-1.5" style={textStyle} pointerEvents="none">

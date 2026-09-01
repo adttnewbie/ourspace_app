@@ -66,7 +66,7 @@ export function TactileMapField({ value, onChange, error }: { value: string; onC
       <Modal visible={open} transparent animationType="slide" onRequestClose={() => setOpen(false)}>
         <View className="flex-1 bg-[#1B1C1A]/40 justify-end">
           <Pressable className="flex-1" onPress={() => setOpen(false)} />
-          <View className="bg-[#FDFCF8] rounded-t-[20px] border-t-[1.5px] border-x-[1.5px] border-[#1B1C1A] px-5 pt-5 pb-6 max-h-[90%]" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 0, height: -4 } }}>
+          <View className="bg-[#FDFCF8] rounded-t-[20px] border-t-[1.5px] border-x-[1.5px] border-[#1B1C1A] px-5 pt-5 pb-6 max-h-[90%]" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 0, height: -4 } }}>
             <View className="absolute -top-2 left-1/2 -translate-x-1/2 z-10">
               <WashiTape w={52} rotate="-2deg" color={C.yellow} />
             </View>
@@ -91,7 +91,7 @@ export function TactileMapField({ value, onChange, error }: { value: string; onC
             </View>
 
             {/* Map canvas - paper layer - always visible preview */}
-            <View className="mt-4 h-[240px] rounded-[16px] border-[1.5px] border-[#1B1C1A] overflow-hidden bg-[#FDFCF8]" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
+            <View className="mt-4 h-[240px] rounded-[16px] border-[1.5px] border-[#1B1C1A] overflow-hidden bg-[#FDFCF8]" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
               {/* paper map texture */}
               <View className="absolute inset-0 bg-[#FDFCF8]">
                 {/* grid streets - tactile */}
@@ -118,7 +118,7 @@ export function TactileMapField({ value, onChange, error }: { value: string; onC
 
               {/* draggable pin - centered */}
               <View className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center" style={{ transform: [{ translateX: -18 }, { translateY: -18 }] }}>
-                <View className="w-9 h-9 rounded-full bg-[#864D61] border-[1.6px] border-[#1B1C1A] items-center justify-center" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
+                <View className="w-9 h-9 rounded-full bg-[#864D61] border-[1.6px] border-[#1B1C1A] items-center justify-center" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
                   <MapPin size={16} color="#fff" fill="#FFD9E3" strokeWidth={1.8} />
                 </View>
                 <View className="w-2 h-2 rounded-full bg-[#1B1C1A] opacity-20 mt-1" />
@@ -169,7 +169,7 @@ export function TactileMapField({ value, onChange, error }: { value: string; onC
                   Batal
                 </Text>
               </Pressable>
-              <Pressable onPress={() => confirm()} className="flex-[1.6] bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3 flex-row items-center justify-center gap-1.5" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
+              <Pressable onPress={() => confirm()} className="flex-[1.6] bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3 flex-row items-center justify-center gap-1.5" style={{ shadowColor: C.ink, shadowOpacity: 0.14, elevation: 3, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
                 <Text className="text-[13px] font-extrabold text-white" style={{ fontFamily: "Bricolage Grotesque" }}>
                   Pakai tempat ini
                 </Text>

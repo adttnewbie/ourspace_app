@@ -198,7 +198,7 @@ export default function DateTab() {
               className="flex-1 bg-white border border-[#1B1C1A] rounded-full px-3 py-2.5 flex-row items-center gap-2"
               style={{
                 shadowColor: C.ink,
-                shadowOpacity: 1,
+                shadowOpacity: 0.14, elevation: 3,
                 shadowRadius: 0,
                 shadowOffset: { width: 2, height: 2 },
               }}
@@ -216,7 +216,7 @@ export default function DateTab() {
               className="w-[42px] h-[42px] rounded-full bg-[#864D61] border border-[#1B1C1A] items-center justify-center active:opacity-80"
               style={{
                 shadowColor: C.ink,
-                shadowOpacity: 1,
+                shadowOpacity: 0.14, elevation: 3,
                 shadowRadius: 0,
                 shadowOffset: { width: 2, height: 2 },
               }}
@@ -234,7 +234,7 @@ export default function DateTab() {
                   className="bg-white rounded-[16px] border-[1.5px] border-[#1B1C1A] p-3.5 overflow-visible"
                   style={{
                     shadowColor: C.ink,
-                    shadowOpacity: 1,
+                    shadowOpacity: 0.14, elevation: 3,
                     shadowRadius: 0,
                     shadowOffset: { width: 3, height: 3 },
                     transform: [{ rotate: d.rot }],
@@ -360,7 +360,7 @@ export default function DateTab() {
             className="bg-[#FDFCF8] rounded-t-[20px] border-t-[1.5px] border-x-[1.5px] border-[#1B1C1A] px-6 pt-5 pb-6 max-h-[88%]"
             style={{
               shadowColor: C.ink,
-              shadowOpacity: 1,
+              shadowOpacity: 0.14, elevation: 3,
               shadowRadius: 0,
               shadowOffset: { width: 0, height: -4 },
             }}
@@ -522,7 +522,7 @@ export default function DateTab() {
                 className="mt-2 bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3.5 flex-row items-center justify-center gap-2 active:opacity-90"
                 style={{
                   shadowColor: C.ink,
-                  shadowOpacity: 1,
+                  shadowOpacity: 0.14, elevation: 3,
                   shadowRadius: 0,
                   shadowOffset: { width: 3, height: 3 },
                 }}
