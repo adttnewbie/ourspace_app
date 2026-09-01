@@ -130,8 +130,8 @@ export default function GetStartedPage() {
           </View>
 
           <View
-            className="mt-6 bg-white rounded-[20px] border-[1.5px] border-[#1B1C1A] p-3.5"
-            style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 4, height: 4 } }}
+            className="mt-6 bg-white rounded-[20px] border-[1.5px] border-[#1B1C1A] p-3.5 overflow-visible"
+            style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 4, height: 4 }, overflow: "visible" as any }}
           >
             <View className="absolute -top-2 left-7 z-10">
               <WashiTape w={52} rotate="-3deg" color={C.yellow} />
@@ -140,8 +140,8 @@ export default function GetStartedPage() {
             <View className="h-[168px] flex-row items-center justify-center">
               <Animated.View className="flex-1 h-[154px]" style={leftStyle}>
                 <View
-                  className="flex-1 bg-white rounded-2xl border-[1.5px] border-[#1B1C1A] p-2.5"
-                  style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}
+                  className="flex-1 bg-white rounded-2xl border-[1.5px] border-[#1B1C1A] p-2.5 overflow-visible"
+                  style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, overflow: "visible" as any }}
                 >
                   <View className="absolute -top-1.5 left-4 z-10">
                     <WashiTape w={40} rotate={swapped ? "3deg" : "-4deg"} color={left.color} />
@@ -172,8 +172,8 @@ export default function GetStartedPage() {
 
               <Animated.View className="flex-1 h-[154px]" style={rightStyle}>
                 <View
-                  className="flex-1 bg-white rounded-2xl border-[1.5px] border-[#1B1C1A] p-2.5"
-                  style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}
+                  className="flex-1 bg-white rounded-2xl border-[1.5px] border-[#1B1C1A] p-2.5 overflow-visible"
+                  style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 }, overflow: "visible" as any }}
                 >
                   <View className="absolute -top-1.5 right-4 z-10">
                     <WashiTape w={40} rotate={swapped ? "-4deg" : "3deg"} color={right.color} />

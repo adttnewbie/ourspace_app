@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { House, Images, CalendarHeart, User } from "lucide-react-native";
+import { House, Images, CalendarHeart, User, StickyNote } from "lucide-react-native";
 
 const C = {
   ink: "#1B1C1A",
@@ -14,8 +14,9 @@ const C = {
 
 const TABS: Record<string, { label: string; Icon: any; activeBg: string }> = {
   home: { label: "Ruang", Icon: House, activeBg: C.pink },
+  notes: { label: "Catatan", Icon: StickyNote, activeBg: "#C6F0D1" },
   memories: { label: "Kenangan", Icon: Images, activeBg: C.yellow },
-  timeline: { label: "Jejak", Icon: CalendarHeart, activeBg: C.blue },
+  timeline: { label: "Kencan", Icon: CalendarHeart, activeBg: C.blue },
   profile: { label: "Kita", Icon: User, activeBg: "#E8D9E0" },
 };
 
@@ -26,7 +27,7 @@ export function BookmarkBar({ state, descriptors, navigation }: any) {
     <View pointerEvents="box-none" className="absolute left-0 right-0 items-center" style={{ bottom: Math.max(insets.bottom, 12) }}>
       {/* shadow paper underneath */}
       <View
-        className="w-[92%] max-w-[380px] h-[68px] rounded-full bg-white border-[1.6px] border-[#1B1C1A] flex-row items-center px-2"
+        className="w-[96%] max-w-[420px] h-[68px] rounded-full bg-white border-[1.6px] border-[#1B1C1A] flex-row items-center px-1.5"
         style={{
           shadowColor: C.ink,
           shadowOpacity: 1,
@@ -64,7 +65,7 @@ export function BookmarkBar({ state, descriptors, navigation }: any) {
               className="flex-1 items-center justify-center gap-1 py-1"
             >
               <View
-                className="w-[52px] h-[36px] rounded-full border items-center justify-center"
+                className="w-[48px] h-[34px] rounded-full border items-center justify-center"
                 style={{
                   backgroundColor: isFocused ? cfg.activeBg : "transparent",
                   borderColor: isFocused ? C.ink : "transparent",
@@ -72,10 +73,10 @@ export function BookmarkBar({ state, descriptors, navigation }: any) {
                   transform: [{ rotate: isFocused ? "-0.6deg" : "0deg" }, { scale: isFocused ? 1.02 : 1 }],
                 }}
               >
-                <Icon size={20} color={isFocused ? C.ink : "#837377"} strokeWidth={isFocused ? 2.1 : 1.8} fill={isFocused ? "rgba(27,28,26,0.06)" : "transparent"} />
+                <Icon size={18} color={isFocused ? C.ink : "#837377"} strokeWidth={isFocused ? 2.1 : 1.8} fill={isFocused ? "rgba(27,28,26,0.06)" : "transparent"} />
               </View>
               <Text
-                className="text-[10px] leading-none tracking-[0.4px]"
+                className="text-[9px] leading-none tracking-[0.3px] text-center"
                 style={{
                   fontFamily: "Space Mono",
                   fontWeight: isFocused ? "700" : "600",

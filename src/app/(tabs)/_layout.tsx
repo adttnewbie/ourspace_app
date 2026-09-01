@@ -11,6 +11,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen name="home" options={{ title: "Ruang" }} />
+      <Tabs.Screen name="notes" options={{ title: "Catatan" }} />
       <Tabs.Screen name="memories" options={{ title: "Kenangan" }} />
       <Tabs.Screen name="timeline" options={{ title: "Jejak" }} />
       <Tabs.Screen name="profile" options={{ title: "Kita" }} />
