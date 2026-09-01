@@ -1,0 +1,24 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+@import "nativewind/theme";
+
+@theme {
+  --color-cream: #FDFCF8;
+  --color-surface: #FAF9F5;
+  --color-ink: #1B1C1A;
+  --color-muted: #514347;
+  --color-primary: #864D61;
+  --color-pink: #FFB7CE;
+  --color-pinkSoft: #FFD9E3;
+  --color-yellow: #EEE199;
+  --color-yellowSoft: #F1E39C;
+  --color-blue: #93D4EB;
+  --color-blueSoft: #B4EBFF;
+  --color-blueDeep: #1E667A;
+  --color-outline: #D5C2C6;
+  --color-outlineStrong: #837377;
+  --font-display: "Bricolage Grotesque", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+}
