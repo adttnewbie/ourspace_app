@@ -79,7 +79,7 @@ export default function LoginPage() {
         <View className="w-full max-w-[400px] self-center flex-1">
           <View className="flex-row items-center justify-between">
             <Link href="/" asChild>
-              <Pressable className="w-9 h-9 rounded-full bg-white border border-[#1B1C1A] items-center justify-center active:scale-95" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
+              <Pressable className="w-9 h-9 rounded-full bg-white border border-[#1B1C1A] items-center justify-center active:opacity-80" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
                 <ArrowLeft size={16} color={C.ink} strokeWidth={2.2} />
               </Pressable>
             </Link>

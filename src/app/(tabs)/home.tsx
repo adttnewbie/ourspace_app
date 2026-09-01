@@ -304,7 +304,7 @@ export default function HomeTab() {
           {/* aksi cepat - shortcut ke 3 tab lain, bukan duplikat list */}
           <View className="mt-5 flex-row gap-2.5">
             <Link href="/(tabs)/notes" asChild>
-              <Pressable className="flex-1 bg-white rounded-[14px] border-[1.5px] border-[#1B1C1A] border-dashed py-3 items-center gap-1.5 active:scale-[0.98]" style={{ shadowColor: C.ink, shadowOpacity: 0.06, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
+              <Pressable className="flex-1 bg-white rounded-[14px] border-[1.5px] border-[#1B1C1A] border-dashed py-3 items-center gap-1.5 active:opacity-90" style={{ shadowColor: C.ink, shadowOpacity: 0.06, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
                 <View className="w-8 h-8 rounded-full bg-[#C6F0D1] border border-[#1B1C1A] items-center justify-center">
                   <StickyNote size={16} color={C.ink} strokeWidth={1.8} />
                 </View>
@@ -314,7 +314,7 @@ export default function HomeTab() {
               </Pressable>
             </Link>
             <Link href="/(tabs)/memories" asChild>
-              <Pressable className="flex-1 bg-white rounded-[14px] border-[1.5px] border-[#1B1C1A] border-dashed py-3 items-center gap-1.5 active:scale-[0.98]" style={{ shadowColor: C.ink, shadowOpacity: 0.06, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
+              <Pressable className="flex-1 bg-white rounded-[14px] border-[1.5px] border-[#1B1C1A] border-dashed py-3 items-center gap-1.5 active:opacity-90" style={{ shadowColor: C.ink, shadowOpacity: 0.06, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
                 <View className="w-8 h-8 rounded-full bg-[#FFD9E3] border border-[#1B1C1A] items-center justify-center">
                   <Camera size={16} color={C.ink} strokeWidth={1.8} />
                 </View>
@@ -324,7 +324,7 @@ export default function HomeTab() {
               </Pressable>
             </Link>
             <Link href="/(tabs)/timeline" asChild>
-              <Pressable className="flex-1 bg-white rounded-[14px] border-[1.5px] border-[#1B1C1A] border-dashed py-3 items-center gap-1.5 active:scale-[0.98]" style={{ shadowColor: C.ink, shadowOpacity: 0.06, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
+              <Pressable className="flex-1 bg-white rounded-[14px] border-[1.5px] border-[#1B1C1A] border-dashed py-3 items-center gap-1.5 active:opacity-90" style={{ shadowColor: C.ink, shadowOpacity: 0.06, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
                 <View className="w-8 h-8 rounded-full bg-[#B4EBFF] border border-[#1B1C1A] items-center justify-center">
                   <CalendarHeart size={16} color={C.ink} strokeWidth={1.8} />
                 </View>

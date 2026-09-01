@@ -87,7 +87,7 @@ export function TactileTimeField({ value, onChange, error }: { value: string; on
               </View>
             </View>
 
-            <Pressable onPress={confirm} className="mt-4 bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3 flex-row items-center justify-center gap-2 active:scale-[0.98]" style={{ shadowColor:C.ink, shadowOpacity:1, shadowRadius:0, shadowOffset:{width:3,height:3} }}>
+            <Pressable onPress={confirm} className="mt-4 bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3 flex-row items-center justify-center gap-2 active:opacity-90" style={{ shadowColor:C.ink, shadowOpacity:1, shadowRadius:0, shadowOffset:{width:3,height:3} }}>
               <Text className="text-[14px] font-extrabold text-white" style={{ fontFamily:"Bricolage Grotesque" }}>Pakai jam {String(h).padStart(2,"0")}:{String(m).padStart(2,"0")}</Text>
               <View className="w-6 h-6 rounded-full bg-white items-center justify-center"><Clock3 size={12} color={C.ink} /></View>
             </Pressable>

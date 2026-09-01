@@ -160,7 +160,7 @@ export default function GetStartedPage() {
 
               <View className="absolute z-10 items-center justify-center">
                 <View className="absolute w-[60px] h-[60px] rounded-full bg-[#1B1C1A] translate-x-[2.5px] translate-y-[2.5px]" />
-                <Pressable onPress={toggleSwap} className="w-[58px] h-[58px] rounded-full bg-[#F1E39C] border-[1.6px] border-[#1B1C1A] items-center justify-center active:scale-95">
+                <Pressable onPress={toggleSwap} className="w-[58px] h-[58px] rounded-full bg-[#F1E39C] border-[1.6px] border-[#1B1C1A] items-center justify-center active:opacity-80">
                   <Animated.View className="items-center justify-center gap-[1px]" style={btnAnim}>
                     <ArrowLeftRight size={18} color={C.ink} strokeWidth={2.2} />
                     <Text className="text-[7px] font-extrabold tracking-[0.8px] text-[#1B1C1A]" style={{ fontFamily: "Space Mono" }}>

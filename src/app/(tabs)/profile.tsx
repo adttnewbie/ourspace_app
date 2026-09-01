@@ -234,7 +234,7 @@ export default function ProfileTab() {
                 </View>
               </View>
 
-              <Pressable className="bg-white rounded-[14px] border-[1.4px] border-[#1B1C1A] p-4 flex-row items-center gap-3 active:scale-[0.99]" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
+              <Pressable className="bg-white rounded-[14px] border-[1.4px] border-[#1B1C1A] p-4 flex-row items-center gap-3 active:opacity-90" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
                 <View className="w-9 h-9 rounded-full bg-[#FDFCF8] border border-[#1B1C1A] items-center justify-center">
                   <Shield size={16} color={C.ink} strokeWidth={1.8} />
                 </View>
@@ -272,7 +272,7 @@ export default function ProfileTab() {
           </View>
 
           <Link href="/" asChild>
-            <Pressable className="mt-4 bg-white rounded-full border-[1.4px] border-[#1B1C1A] py-3 flex-row items-center justify-center gap-2 active:scale-[0.98]">
+            <Pressable className="mt-4 bg-white rounded-full border-[1.4px] border-[#1B1C1A] py-3 flex-row items-center justify-center gap-2 active:opacity-90">
               <LogOut size={16} color={C.ink} />
               <Text className="text-[13px] font-bold text-[#1B1C1A]" style={{ fontFamily: "Space Mono" }}>
                 Keluar

@@ -105,7 +105,7 @@ export default function NotesTab() {
                 </Pressable>
               )}
             </View>
-            <Pressable onPress={() => { setErrors({}); setShowAdd(true); }} className="w-[42px] h-[42px] rounded-full bg-[#864D61] border border-[#1B1C1A] items-center justify-center active:scale-95" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
+            <Pressable onPress={() => { setErrors({}); setShowAdd(true); }} className="w-[42px] h-[42px] rounded-full bg-[#864D61] border border-[#1B1C1A] items-center justify-center active:opacity-80" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 2, height: 2 } }}>
               <Plus size={18} color="#fff" strokeWidth={2.2} />
             </Pressable>
           </View>
@@ -307,7 +307,7 @@ export default function NotesTab() {
                 </View>
               </View>
 
-              <Pressable onPress={handleSave} className="mt-1 bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3.5 flex-row items-center justify-center gap-2 active:scale-[0.98]" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
+              <Pressable onPress={handleSave} className="mt-1 bg-[#864D61] rounded-full border-[1.6px] border-[#1B1C1A] py-3.5 flex-row items-center justify-center gap-2 active:opacity-90" style={{ shadowColor: C.ink, shadowOpacity: 1, shadowRadius: 0, shadowOffset: { width: 3, height: 3 } }}>
                 <Text className="text-[15px] font-extrabold text-white" style={{ fontFamily: "Bricolage Grotesque" }}>
                   Tempel catatan
                 </Text>
